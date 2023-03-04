@@ -1,9 +1,6 @@
 package com.practice.studyolle.account;
 
-import com.practice.studyolle.domain.Account;
 import lombok.RequiredArgsConstructor;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
@@ -20,8 +17,8 @@ import javax.validation.Valid;
 public class AccountController {
 
     private final SignUpFormValidator signUpFormValidator;
-    private final AccountRepository accountRepository;
-    private final JavaMailSender javaMailSender;
+    private final AccountService accountService;
+
 
     // 커스텀 검증
     // signUpForm 데이터를 가진 메서드가 실행될 때마다 해당 메서드를 거침
@@ -50,28 +47,11 @@ public class AccountController {
         if(errors.hasErrors()) {
             return "account/sign-up";
         }
-        // TODO 회원가입처리
-        Account newAccount = Account.builder()
-                .email(signUpForm.getEmail())
-                .nickname(signUpForm.getNickname())
-                .password(signUpForm.getPassword()) // TODO PASSWORD Encoding
-                .studyCreatedByWeb(true)
-                .studyEnrollmentResultByWeb(true)
-                .studyUpdateByWeb(true)
-                .build();
 
-        accountRepository.save(newAccount);
+        accountService.processNewAccount(signUpForm);
 
-        // 가입 인증 메일 전송
-        newAccount.generateEmailCheckToken();
-        SimpleMailMessage mail = new SimpleMailMessage();
-        mail.setTo(newAccount.getEmail());
-        mail.setSubject("스터디 올래, 가입 인증 메일");
-        mail.setText("/check-email-token?"
-                + "token=" + newAccount.getEmailCheckToken()
-                + "&email="+newAccount.getEmail());
-
-        javaMailSender.send(mail);
         return "redirect:/";
     }
+
+
 }
