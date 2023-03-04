@@ -75,6 +75,8 @@ class AccountControllerTest {
         assertNotNull(account);
         // 패스워드를 인코딩하여 DB에 저장하는지 체크
         assertNotEquals(account.getPassword(),"12345678");
+        // 저장된 회원의 Token 이 null 이 아닌지 체크
+        assertNotNull(account.getEmailCheckToken());
         // JavaMailSender 에서 SimpleMailMessage 인스턴스를 send 하는 메서드를 호출하는지 체크
         then(javaMailSender).should().send(any(SimpleMailMessage.class));
     }
