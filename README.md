@@ -47,5 +47,15 @@
 
 ---
 
+## 검증 방식
+* 1차로 view 에서 검증 (빠른 사전 차단을 위해)
+* 2차 sever controller 검증
+  * JSR 303 어노테이션 검증
+  * @InitBinder 와 Validator 인터페이스를 통해 커스텀 검증
+  
+<br>
+
+---
+
 ## REFERENCE
 * [인프런] 스프링과 JPA 기반 웹 애플리케이션 개발 - 백기선
