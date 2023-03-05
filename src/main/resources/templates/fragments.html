@@ -8,6 +8,14 @@
   <meta charset="UTF-8">
   <title>StudyOlle</title>
   <link rel="stylesheet" href="/node_modules/bootstrap/dist/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="/node_modules/font-awesome/css/font-awesome.min.css"/>
+
+  <!-- [jdenticon 이슈] jQuery load 메서드에서 아이콘이 나오지 않는 에러 해결-->
+  <!-- svg, canvas 태그는 동적인 요청이어야 동작-->
+  <script> window.jdenticon_config={replaceMode:"observe"};</script>
+  <script src="/node_modules/jdenticon/dist/jdenticon.min.js"></script>
+  <script src="/node_modules/jquery/dist/jquery.min.js"></script>
+  <script src="/node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
   <style>
     .container {
       max-widht: 100%;
@@ -43,22 +51,27 @@
         <a class="nav-link" href="#" th:href="@{/sign-up}">가입</a>
       </li>
       <li class="nav-item" sec:authorize="isAuthenticated()">
-        <a class="nav-link" href="#" th:href="@{/notification}">알림</a>
+        <a class="nav-link" href="#" th:href="@{/notification}">
+          <i class="fa fa-bell-o" aria-hidden="true"></i>
+        </a>
       </li>
       <li class="nav-item" sec:authorize="isAuthenticated()">
-        <a class="nav-link btn btn-outline-primary" href="#" th:href="@{/notification}">스터디 개설</a>
+        <a class="nav-link btn btn-outline-primary" href="#" th:href="@{/notification}">
+          <i class="fa fa-plus" aria-hidden="true"></i> 스터디 개설
+        </a>
       </li>
       <li class="nav-item dropdown" sec:authorize="isAuthenticated()">
         <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown"
            aria-haspopup="true" aria-expanded="false">
-          프로필
+          <svg data-jdenticon-value="user127" th:data-jdenticon-value="${#authentication.name}"
+               width="24" height="24" class="rounded border bg-light"></svg>
         </a>
         <div class="dropdown-menu dropdown-menu-sm-right" aria-labelledby="userDropdown">
           <h6 class="dropdown-header">
             <span sec:authentication="name">Username</span>
           </h6>
           <a class="dropdown-item" th:href="@{'/profile/' + ${#authentication.name}}">프로필</a>
-          <a class="dropdown-item">스터디</a>
+          <a class="dropdown-item" >스터디</a>
           <div class="dropdown-divider"></div>
           <a class="dropdown-item" href="#" th:href="@{'/settings/profile'}">설정</a>
           <form class="form-inline my-2 my-lg-0" action="#" th:action="@{/logout}" method="post">

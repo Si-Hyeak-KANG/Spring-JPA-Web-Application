@@ -44,7 +44,7 @@
 * Devtools
 
 ### FRONT
-* Bootstrap
+* Bootstrap, jquery, font-awesome, jdenticon
 * NPM
 * package.json
 
