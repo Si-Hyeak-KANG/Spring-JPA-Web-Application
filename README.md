@@ -33,7 +33,7 @@
 * Spring boot
 * Spring Web MVC
 * Thymeleaf (view template)
-* Thymeleaf-extras (타임리프 스프링 시큐리티5 확장팩)
+* Thymeleaf-extras (타임리프 스프링 시큐리티5 확장)
 * Spring Security
 * Spring Data JPA
 * H2
@@ -45,6 +45,10 @@
 
 ### FRONT
 * Bootstrap
+* NPM
+* package.json
+
+`프론트 라이브러리는 git에 올려 관리하지 않기 때문에 maven build할 때 자동으로 설치하도록 설정`
 
 ---
 
