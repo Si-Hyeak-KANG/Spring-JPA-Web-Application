@@ -42,7 +42,7 @@ public class AccountService {
         return accountRepository.save(newAccount);
     }
 
-    private void sendSignUpConfirmEmail(Account newAccount) {
+    public void sendSignUpConfirmEmail(Account newAccount) {
         SimpleMailMessage mail = new SimpleMailMessage();
         mail.setTo(newAccount.getEmail());
         mail.setSubject("스터디 올래, 가입 인증 메일");
