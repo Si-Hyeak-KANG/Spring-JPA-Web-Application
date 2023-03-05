@@ -33,6 +33,7 @@
 * Spring boot
 * Spring Web MVC
 * Thymeleaf (view template)
+* Thymeleaf-extras (타임리프 스프링 시큐리티5 확장팩)
 * Spring Security
 * Spring Data JPA
 * H2
