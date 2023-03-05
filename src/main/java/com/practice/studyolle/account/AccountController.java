@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import javax.validation.Valid;
-import java.time.LocalDateTime;
 
 @Controller
 @RequiredArgsConstructor
@@ -55,6 +54,7 @@ public class AccountController {
     @GetMapping("/check-email-token")
     public String checkEmailToken(String token, String email, Model model) {
         Account account = accountRepository.findByEmail(email);
+
         String view = "account/checked-email";
         if(account == null) {
             model.addAttribute("error", "wrong.error");
@@ -65,9 +65,8 @@ public class AccountController {
             model.addAttribute("error", "wrong.token");
             return view;
         }
-
-        account.setEmailVerified(true);
-        account.setJoinedAt(LocalDateTime.now());
+        
+        account.completeSignUp();
         model.addAttribute("numberOfUser", accountRepository.count());
         model.addAttribute("nickname",account.getNickname());
         return view;

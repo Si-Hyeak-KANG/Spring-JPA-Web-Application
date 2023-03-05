@@ -10,6 +10,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.transaction.annotation.Transactional;
 
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -22,12 +23,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
+@Transactional
 class AccountControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
 
-    @Autowired AccountRepository accountRepository;
+    @Autowired
+    AccountRepository accountRepository;
 
     @MockBean
     JavaMailSender javaMailSender;
@@ -49,10 +52,10 @@ class AccountControllerTest {
     @Test
     void signUpSubmit_with_wrong_input() throws Exception {
         mockMvc.perform(post("/sign-up")
-                .param("nickname","test")
-                .param("email", "email")
-                .param("password","12345")
-                .with(csrf()))
+                        .param("nickname", "test")
+                        .param("email", "email")
+                        .param("password", "12345")
+                        .with(csrf()))
                 .andExpect(status().isOk())
                 .andExpect(model().hasErrors())
                 .andExpect(view().name("account/sign-up"));
@@ -63,9 +66,9 @@ class AccountControllerTest {
     @Test
     void signUpSubmit_with_correct_input() throws Exception {
         mockMvc.perform(post("/sign-up")
-                        .param("nickname","test")
+                        .param("nickname", "test")
                         .param("email", "email@test.com")
-                        .param("password","12345678")
+                        .param("password", "12345678")
                         .with(csrf()))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name("redirect:/"));
@@ -74,10 +77,42 @@ class AccountControllerTest {
         // 정상적으로 데이터를 저장했는지 체크
         assertNotNull(account);
         // 패스워드를 인코딩하여 DB에 저장하는지 체크
-        assertNotEquals(account.getPassword(),"12345678");
+        assertNotEquals(account.getPassword(), "12345678");
         // 저장된 회원의 Token 이 null 이 아닌지 체크
         assertNotNull(account.getEmailCheckToken());
         // JavaMailSender 에서 SimpleMailMessage 인스턴스를 send 하는 메서드를 호출하는지 체크
         then(javaMailSender).should().send(any(SimpleMailMessage.class));
+    }
+
+    @DisplayName("인증 메일 확인 - 입력값 오류")
+    @Test
+    void checkEmailToken_with_wrong_input() throws Exception {
+        mockMvc.perform(get("/check-email-token")
+                        .param("token", "temp-token")
+                        .param("email", "email@email.com"))
+                .andExpect(status().isOk())
+                .andExpect(model().attributeExists("error"))
+                .andExpect(view().name("account/checked-email"));
+    }
+
+    @DisplayName("인증 메일 확인 - 입력값 정상")
+    @Test
+    void checkEmailToken() throws Exception {
+        Account account = Account.builder()
+                .email("test@test.com")
+                .password("12345678")
+                .nickname("test")
+                .build();
+        Account newAccount = accountRepository.save(account);
+        newAccount.generateEmailCheckToken();
+
+        mockMvc.perform(get("/check-email-token")
+                .param("token", newAccount.getEmailCheckToken())
+                .param("email", newAccount.getEmail()))
+                .andExpect(status().isOk())
+                .andExpect(model().attributeDoesNotExist("error"))
+                .andExpect(model().attributeExists("nickname"))
+                .andExpect(model().attributeExists("numberOfUser"))
+                .andExpect(view().name("account/checked-email"));
     }
 }
