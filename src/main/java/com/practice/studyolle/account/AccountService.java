@@ -1,6 +1,7 @@
 package com.practice.studyolle.account;
 
 import com.practice.studyolle.domain.Account;
+import com.practice.studyolle.settings.Profile;
 import lombok.RequiredArgsConstructor;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -81,8 +82,21 @@ public class AccountService implements UserDetailsService {
         return new UserAccount(account);
     }
 
+    // account 가 해당 컨트롤러가 실행되기 전에 이미 영속성 컨텍스트에 있으므로 Persist 상태
+    // 따라서 save 명령어를 실행하지 않아도 데이터 값 변경이 적용됨.
     public void completeSignUp(Account account) {
         account.completeSignUp();
         login(account);
+    }
+
+    // http session 에 넣어놨던, Principle 객체 정보 일뿐
+    //  해당 Account 는 Persist 상태가 아닌, detached 상태
+    public void updateProfile(Account account, Profile profile) {
+        account.setUrl(profile.getUrl());
+        account.setOccupation(profile.getOccupation());
+        account.setLocation(profile.getLocation());
+        account.setBio(profile.getBio());
+        account.setProfileImage(profile.getProfileImage());
+        accountRepository.save(account);
     }
 }
