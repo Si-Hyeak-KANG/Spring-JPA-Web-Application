@@ -86,8 +86,8 @@
 						</div>
 
 						<div id="current-profile-image" class="mt-3">
-							<svg th:if="${#strings.isEmpty(profile.profileImage)}" class="rounded"
-							     th:data-jdenticon-value="${account.nickname}" width="125" height="125"></svg>
+							<img th:if="${#strings.isEmpty(profile.profileImage)}" src="/images/none_profile_image.jpeg"
+							     width="125" height="125" class="rounded" alt="프로필"/>
 							<img th:if="${!#strings.isEmpty(profile.profileImage)}" class="rounded"
 							     th:src="${profile.profileImage}"
 							     width="125" height="125" alt="name" th:alt="${account.nickname}"/>

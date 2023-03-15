@@ -25,7 +25,7 @@
 
 <!--MAIN NAVIGATION-->
 <nav th:fragment="main-nav" class="navbar navbar-expand-sm navbar-dark bg-dark">
-	<a class="navbar-brand" href="/" th:href="@{/}">
+	<a class="navbar-brand mx-3 nav-pills" href="/" th:href="@{/}">
 		<img src="/images/logo_sm.png" width="30" height="30">
 	</a>
 	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
@@ -33,8 +33,9 @@
 		<span class="navbar-toggler-icon"></span>
 	</button>
 
-	<div class="collapse navbar-collapse" id="navbarSupportedContent">
-		<ul class="navbar-nav mr-auto">
+	<div class="collapse navbar-collapse justify-content-end" id="navbarSupportedContent">
+
+		<ul class="nav nav-pills">
 			<li class="nav-item">
 				<form th:action="@{/search/study}" class="form-inline" method="get">
 					<input class="form-control mr-sm-2" name="keyword" type="search" placeholder="스터디 찾기"
@@ -43,11 +44,11 @@
 			</li>
 		</ul>
 
-		<ul class="navbar-nav justify-content-end">
-			<li class="nav-item " sec:authorize="!isAuthenticated()" style="float:right;">
+		<ul class="nav nav-pills">
+			<li class="nav-item " sec:authorize="!isAuthenticated()">
 				<a class="nav-link" href="#" th:href="@{/login}">로그인</a>
 			</li>
-			<li class="nav-item" sec:authorize="!isAuthenticated()" style="float: right">
+			<li class="nav-item" sec:authorize="!isAuthenticated()">
 				<a class="nav-link" href="#" th:href="@{/sign-up}">가입</a>
 			</li>
 			<li class="nav-item" sec:authorize="isAuthenticated()">
@@ -60,15 +61,15 @@
 					<i class="fa fa-plus" aria-hidden="true"></i> 스터디 개설
 				</a>
 			</li>
-			<li class="nav-item dropdown" sec:authorize="isAuthenticated()">
+			<li class="nav-item dropdown " sec:authorize="isAuthenticated()">
 				<a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown"
 				   aria-haspopup="true" aria-expanded="false">
-					<svg th:if="${#strings.isEmpty(account?.profileImage)}" th:data-jdenticon-value="${#authentication.name}"
-					     width="24" height="24" class="rounded border bg-light"></svg>
+					<img th:if="${#strings.isEmpty(account?.profileImage)}" src="/images/none_profile_image.jpeg"
+					     width="24" height="24" class="rounded border bg-light"/>
 					<img th:if="${!#strings.isEmpty(account?.profileImage)}" th:src="${account.profileImage}"
 					     width="24" height="24" class="rounded border"/>
 				</a>
-				<div class="dropdown-menu dropdown-menu-dark" aria-labelledby="userDropdown">
+				<div class="dropdown-menu dropdown-menu-dark" aria-labelledby="userDropdown"  style="left: -85px">
 					<h6 class="dropdown-header">
 						<span sec:authentication="name">Username</span>
 					</h6>
