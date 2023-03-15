@@ -1,6 +1,7 @@
 package com.practice.studyolle.account;
 
 import com.practice.studyolle.domain.Account;
+import com.practice.studyolle.settings.Notifications;
 import com.practice.studyolle.settings.Profile;
 import lombok.RequiredArgsConstructor;
 import org.springframework.mail.SimpleMailMessage;
@@ -103,6 +104,16 @@ public class AccountService implements UserDetailsService {
     public void updatePassword(Account account, String newPassword) {
         String encodedPassword = passwordEncoder.encode(newPassword);
         account.setPassword(encodedPassword);
+        accountRepository.save(account);
+    }
+
+    public void updateNotifications(Account account, Notifications notifications) {
+        account.setStudyCreatedByEmail(notifications.isStudyCreatedByEmail());
+        account.setStudyCreatedByWeb(notifications.isStudyCreatedByWeb());
+        account.setStudyEnrollmentResultByEmail(notifications.isStudyEnrollmentResultByEmail());
+        account.setStudyEnrollmentResultByWeb(notifications.isStudyEnrollmentResultByWeb());
+        account.setStudyUpdateByEmail(notifications.isStudyUpdatedByEmail());
+        account.setStudyUpdateByWeb(notifications.isStudyUpdatedByWeb());
         accountRepository.save(account);
     }
 }
