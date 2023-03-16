@@ -4,6 +4,7 @@ import com.practice.studyolle.domain.Account;
 import com.practice.studyolle.settings.Notifications;
 import com.practice.studyolle.settings.Profile;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -26,6 +27,7 @@ public class AccountService implements UserDetailsService {
     private final AccountRepository accountRepository;
     private final JavaMailSender javaMailSender;
     private final PasswordEncoder passwordEncoder;
+    private final ModelMapper modelMapper;
 
     public Account processNewAccount(SignUpForm signUpForm) {
         Account newAccount = saveNewAccount(signUpForm);
@@ -41,7 +43,7 @@ public class AccountService implements UserDetailsService {
                 .password(passwordEncoder.encode(signUpForm.getPassword()))
                 .studyCreatedByWeb(true)
                 .studyEnrollmentResultByWeb(true)
-                .studyUpdateByWeb(true)
+                .studyUpdatedByWeb(true)
                 .build();
 
         return accountRepository.save(newAccount);
@@ -93,11 +95,7 @@ public class AccountService implements UserDetailsService {
     // http session 에 넣어놨던, Principle 객체 정보 일뿐
     //  해당 Account 는 Persist 상태가 아닌, detached 상태
     public void updateProfile(Account account, Profile profile) {
-        account.setUrl(profile.getUrl());
-        account.setOccupation(profile.getOccupation());
-        account.setLocation(profile.getLocation());
-        account.setBio(profile.getBio());
-        account.setProfileImage(profile.getProfileImage());
+        modelMapper.map(profile, account);
         accountRepository.save(account);
     }
 
@@ -108,12 +106,7 @@ public class AccountService implements UserDetailsService {
     }
 
     public void updateNotifications(Account account, Notifications notifications) {
-        account.setStudyCreatedByEmail(notifications.isStudyCreatedByEmail());
-        account.setStudyCreatedByWeb(notifications.isStudyCreatedByWeb());
-        account.setStudyEnrollmentResultByEmail(notifications.isStudyEnrollmentResultByEmail());
-        account.setStudyEnrollmentResultByWeb(notifications.isStudyEnrollmentResultByWeb());
-        account.setStudyUpdateByEmail(notifications.isStudyUpdatedByEmail());
-        account.setStudyUpdateByWeb(notifications.isStudyUpdatedByWeb());
+        modelMapper.map(notifications,account);
         accountRepository.save(account);
     }
 }

@@ -55,8 +55,8 @@ public class Account {
     private boolean studyEnrollmentResultByEmail;
     private boolean studyEnrollmentResultByWeb = true;
 
-    private boolean studyUpdateByEmail;
-    private boolean studyUpdateByWeb = true;
+    private boolean studyUpdatedByEmail;
+    private boolean studyUpdatedByWeb = true;
 
 
     public void generateEmailCheckToken() {

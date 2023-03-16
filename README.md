@@ -42,8 +42,9 @@
 * Spring mail
 * Query DSL
 * Devtools
+* ModelMapper
 
-### FRONT
+### FRONTEND
 * Bootstrap
 * jquery
 * font-awesome 

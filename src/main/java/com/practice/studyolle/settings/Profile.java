@@ -1,6 +1,5 @@
 package com.practice.studyolle.settings;
 
-import com.practice.studyolle.domain.Account;
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;
 
@@ -20,16 +19,5 @@ public class Profile {
     private String location;
 
     private String profileImage;
-
-    public Profile() {
-    }
-
-    public Profile(Account account) {
-        this.bio = account.getBio();
-        this.url = account.getUrl();
-        this.occupation = account.getOccupation();
-        this.location = account.getLocation();
-        this.profileImage = account.getProfileImage();
-    }
 
 }
