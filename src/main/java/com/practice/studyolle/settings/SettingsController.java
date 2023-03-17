@@ -3,6 +3,10 @@ package com.practice.studyolle.settings;
 import com.practice.studyolle.account.AccountService;
 import com.practice.studyolle.account.CurrentUser;
 import com.practice.studyolle.domain.Account;
+import com.practice.studyolle.settings.form.Notifications;
+import com.practice.studyolle.settings.form.PasswordForm;
+import com.practice.studyolle.settings.form.Profile;
+import com.practice.studyolle.settings.validator.PasswordFormValidator;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Controller;
@@ -39,7 +43,7 @@ public class SettingsController {
     @GetMapping(SETTINGS_PROFILE_URL)
     public String updateProfileForm(@CurrentUser Account account, Model model) {
         model.addAttribute(account);
-        model.addAttribute(modelMapper.map(account,Profile.class));
+        model.addAttribute(modelMapper.map(account, Profile.class));
         return SETTINGS_PROFILE_VIEW_NAME;
     }
 

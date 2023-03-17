@@ -20,9 +20,9 @@ public class AppConfig {
     /* errors
     1) The destination property com.practice.studyolle.domain.Account.setEmail() matches multiple source property hierarchies:
 
-	com.practice.studyolle.settings.Notifications.isStudyUpdatedByEmail()
-	com.practice.studyolle.settings.Notifications.isStudyCreatedByEmail()
-	com.practice.studyolle.settings.Notifications.isStudyEnrollmentResultByEmail()
+	com.practice.studyolle.settings.form.Notifications.isStudyUpdatedByEmail()
+	com.practice.studyolle.settings.form.Notifications.isStudyCreatedByEmail()
+	com.practice.studyolle.settings.form.Notifications.isStudyEnrollmentResultByEmail()
     */
     // mapper default 는 None
     // CamelCase 와 UNDERSCORE 를 분리해서 인지

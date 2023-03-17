@@ -1,4 +1,4 @@
-package com.practice.studyolle.account;
+package com.practice.studyolle.account.form;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
