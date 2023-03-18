@@ -3,22 +3,19 @@ package com.practice.studyolle.settings;
 import com.practice.studyolle.account.AccountService;
 import com.practice.studyolle.account.CurrentUser;
 import com.practice.studyolle.domain.Account;
-import com.practice.studyolle.settings.form.NicknameForm;
-import com.practice.studyolle.settings.form.Notifications;
-import com.practice.studyolle.settings.form.PasswordForm;
-import com.practice.studyolle.settings.form.Profile;
+import com.practice.studyolle.domain.Tag;
+import com.practice.studyolle.settings.form.*;
 import com.practice.studyolle.settings.validator.NicknameValidator;
 import com.practice.studyolle.settings.validator.PasswordFormValidator;
+import com.practice.studyolle.tag.TagRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
@@ -35,10 +32,13 @@ public class SettingsController {
     static final String SETTINGS_NOTIFICATION_URL = "/" + SETTINGS_NOTIFICATION_VIEW_NAME;
     static final String SETTINGS_ACCOUNT_VIEW_NAME = "settings/account";
     static final String SETTINGS_ACCOUNT_URL = "/" + SETTINGS_ACCOUNT_VIEW_NAME;
+    static final String SETTINGS_TAGS_VIEW_NAME = "settings/tags";
+    static final String SETTINGS_TAGS_URL = "/" + SETTINGS_TAGS_VIEW_NAME;
 
     private final ModelMapper modelMapper;
     private final AccountService accountService;
     private final NicknameValidator nicknameValidator;
+    final TagRepository tagRepository;
 
     @InitBinder("passwordForm")
     public void passwordFormInitBinder(WebDataBinder webDataBinder) {
@@ -137,5 +137,27 @@ public class SettingsController {
         accountService.updateNickname(account, nicknameForm.getNickname());
         attribute.addFlashAttribute("message", "닉네임을 수정했습니다.");
         return "redirect:" + SETTINGS_ACCOUNT_URL;
+    }
+
+    @GetMapping(SETTINGS_TAGS_URL)
+    public String updateTagsForm(@CurrentUser Account account, Model model) {
+        model.addAttribute(account);
+        return SETTINGS_TAGS_VIEW_NAME;
+    }
+
+    @PostMapping("/settings/tags/add")
+    @ResponseBody
+    public ResponseEntity addTags(@CurrentUser Account account, @RequestBody TagForm tagForm) {
+        String title = tagForm.getTagTitle();
+
+        // 있으면 조회, 없으면 새로 저장 후 조회
+        Tag tag = tagRepository.findByTitle(title).orElseGet(() ->
+                tagRepository.save(Tag.builder()
+                        .title(tagForm.getTagTitle())
+                        .build()
+                )
+        );
+        accountService.addTag(account, tag);
+        return ResponseEntity.ok().build();
     }
 }

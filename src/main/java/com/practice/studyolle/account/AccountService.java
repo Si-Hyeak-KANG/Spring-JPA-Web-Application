@@ -2,6 +2,7 @@ package com.practice.studyolle.account;
 
 import com.practice.studyolle.account.form.SignUpForm;
 import com.practice.studyolle.domain.Account;
+import com.practice.studyolle.domain.Tag;
 import com.practice.studyolle.settings.form.Notifications;
 import com.practice.studyolle.settings.form.Profile;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -126,5 +128,14 @@ public class AccountService implements UserDetailsService {
         mailMessage.setText("/login-by-email?token=" + account.getEmailCheckToken() +
                 "&email=" + account.getEmail());
         javaMailSender.send(mailMessage);
+    }
+
+    public void addTag(Account account, Tag tag) {
+
+        // 즉시(EAGER) 로딩
+        Optional<Account> byId = accountRepository.findById(account.getId());
+        byId.ifPresent(a -> a.getTags().add(tag));
+
+        // accountRepository.getOne() -> 지연(Lazy) 로딩
     }
 }
