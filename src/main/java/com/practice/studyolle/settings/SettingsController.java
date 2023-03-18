@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -157,11 +158,24 @@ public class SettingsController {
         // 있으면 조회, 없으면 새로 저장 후 조회
         Tag tag = tagRepository.findByTitle(title).orElseGet(() ->
                 tagRepository.save(Tag.builder()
-                        .title(tagForm.getTagTitle())
+                        .title(title)
                         .build()
                 )
         );
         accountService.addTag(account, tag);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/settings/tags/remove")
+    @ResponseBody
+    public ResponseEntity removeTags(@CurrentUser Account account, @RequestBody TagForm tagForm) {
+        String title = tagForm.getTagTitle();
+
+        Optional<Tag> tag = tagRepository.findByTitle(title);
+        if(tag.isEmpty()) {
+            return ResponseEntity.badRequest().build();
+        }
+        accountService.removeTag(account, tag.get());
         return ResponseEntity.ok().build();
     }
 }

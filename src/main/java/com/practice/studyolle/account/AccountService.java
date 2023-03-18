@@ -144,4 +144,10 @@ public class AccountService implements UserDetailsService {
         Optional<Account> byId = accountRepository.findById(account.getId());
         return byId.orElseThrow().getTags();
     }
+
+    // account가 추가했던 태그만 제거, 태그를 삭제 x -> 하지만 현재는 태그가 삭제되는중,,?
+    public void removeTag(Account account, Tag tag) {
+        accountRepository.findById(account.getId())
+                .ifPresent(a -> a.getTags().remove(tag));
+    }
 }
