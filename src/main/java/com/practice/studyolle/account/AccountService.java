@@ -117,4 +117,14 @@ public class AccountService implements UserDetailsService {
         // 변경사항 업데이트를 위해 login 기능 수행
         login(account);
     }
+
+    public void sendLoginLinkByEmail(Account account) {
+        account.generateEmailCheckToken();
+        SimpleMailMessage mailMessage = new SimpleMailMessage();
+        mailMessage.setTo(account.getEmail());
+        mailMessage.setSubject("스터디올래, 로그인 링크");
+        mailMessage.setText("/login-by-email?token=" + account.getEmailCheckToken() +
+                "&email=" + account.getEmail());
+        javaMailSender.send(mailMessage);
+    }
 }
