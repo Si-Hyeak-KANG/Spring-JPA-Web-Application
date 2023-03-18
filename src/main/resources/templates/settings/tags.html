@@ -20,6 +20,8 @@
 						<br> 태그를 입력하고(,) 또는 엔터를 입력하세요.
 					</div>
 
+					<!-- 사용자가 입력하는 글자와 근접한 데이터가 있으면 자동 입력 리스트 -->
+					<div id="whitelist" th:text="${whitelist}" hidden></div>
 					<!-- Thymeleaf 가 제공하는 String Util 을 사용하여 조인 -->
 					<!-- List<String> tags = List.of("Spring", "Hibernate") => Spring, Hibernate -->
 					<input id="tags" type="text" name="tags" th:value="${#strings.listJoin(tags, ',')}"
@@ -29,7 +31,6 @@
 		</div>
 	</div>
 </div>
-<script th:replace="fragments.html :: form-validation"></script>
 <script src="/node_modules/@yaireo/tagify/dist/tagify.min.js"></script>
 <script type="application/javascript" th:inline="javascript">
 	$(function() {
@@ -41,9 +42,6 @@
 	});
 </script>
 <script type="application/javascript">
-	function closeAlert() {
-		$('#success-message').hide();
-	}
 
 	// FORM 뿐만아니라 ajax도 POST 요청시 csrf 토큰 전송 필요
 	$(function () {
@@ -75,6 +73,7 @@
 
 		var tagify = new Tagify(tagInput, {
 			pattern: /^.{0,20}$/,
+			whitelist: JSON.parse(document.querySelector("#whitelist").textContent),
 			dropdown : {
 				enabled: 1, // suggest tags after a single character input
 			} // map tags
