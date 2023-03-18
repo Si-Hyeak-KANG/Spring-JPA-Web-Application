@@ -13,14 +13,14 @@
 		<div th:if="${error}" class="alert alert-danger alert-dismissible fade show mt-3" role="alert" id="fail-alert-message">
 			<span th:text="${error}">완료</span>
 			<button type="button" class="btn-close" data-dismiss="alert" aria-label="Close" onclick="closeFailAlert()">
-				<span aria-hidden="true">&times;</span>
+				<span aria-hidden="true"></span>
 			</button>
 		</div>
 
 		<div th:if="${message}" class="alert alert-info alert-dismissible fade show mt-3" role="alert" id="success-alert-message">
 			<span th:text="${message}">완료</span>
 			<button type="button" class="btn-close" data-dismiss="alert" aria-label="Close" onclick="closeSuccessAlert()">
-				<span aria-hidden="true">&times;</span>
+				<span aria-hidden="true"></span>
 			</button>
 		</div>
 
