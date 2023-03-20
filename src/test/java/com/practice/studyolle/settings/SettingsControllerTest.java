@@ -1,17 +1,23 @@
 package com.practice.studyolle.settings;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.practice.studyolle.WithAccount;
 import com.practice.studyolle.account.AccountRepository;
 import com.practice.studyolle.account.AccountService;
 import com.practice.studyolle.domain.Account;
+import com.practice.studyolle.domain.Tag;
+import com.practice.studyolle.settings.form.TagForm;
+import com.practice.studyolle.tag.TagRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.transaction.annotation.Transactional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
@@ -21,6 +27,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
+@Transactional
 class SettingsControllerTest {
 
     @Autowired
@@ -32,6 +39,10 @@ class SettingsControllerTest {
     AccountRepository accountRepository;
     @Autowired
     PasswordEncoder passwordEncoder;
+    @Autowired
+    ObjectMapper objectMapper;
+    @Autowired
+    TagRepository tagRepository;
 
     @AfterEach
     void afterEach() {
@@ -163,6 +174,66 @@ class SettingsControllerTest {
 
     }
 
+    @WithAccount("test")
+    @DisplayName("계정의 태그 수정 폼")
+    @Test
+    void updateTagsForm() throws Exception {
+        mockMvc.perform(get(SettingsController.SETTINGS_TAGS_URL))
+                .andExpect(view().name(SettingsController.SETTINGS_TAGS_VIEW_NAME))
+                .andExpect(model().attributeExists("account"))
+                .andExpect(model().attributeExists("whitelist"))
+                .andExpect(model().attributeExists("tags"));
+    }
+    
+    @WithAccount("test")
+    @DisplayName("계정에 태그 추가")
+    @Test
+    void addTag() throws Exception {
+
+        TagForm tagForm = new TagForm();
+        tagForm.setTagTitle("newTag");
+        
+        mockMvc.perform(post(SettingsController.SETTINGS_TAGS_URL + "/add")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                // .content("{\"tagTitle\" : \"newTag\"}") 이렇게 직접 쓸 수도 있음
+                .content(objectMapper.writeValueAsString(tagForm))
+                .with(csrf()))
+                .andExpect(status().isOk());
+
+
+        Tag newTag = tagRepository.findByTitle("newTag").get();
+        assertNotNull(newTag);
+        Account test = accountRepository.findByNickname("test");
+        // 갖고온 객체가 detached 상태
+        // @Transactional 을 붙여줘서 추가적으로 Lazy loding이 가능해짐
+        // ManyToMany 로 연관 매핑된 다른 엔티티의 정보는 안갖고옴.
+        assertTrue(test.getTags().contains(newTag));
+    }
+
+    @WithAccount("test")
+    @DisplayName("계정의 태그 삭제")
+    @Test
+    void removeTag() throws Exception {
+        Tag newTag = tagRepository.save(Tag.builder().title("newTag").build());
+        Account account = accountRepository.findByNickname("test");
+        accountService.addTag(account,newTag);
+
+        assertTrue(account.getTags().contains(newTag));
+
+        TagForm tagForm = new TagForm();
+        tagForm.setTagTitle("newTag");
+
+        mockMvc.perform(post(SettingsController.SETTINGS_TAGS_URL + "/remove")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(tagForm))
+                .with(csrf()))
+                .andExpect(status().isOk());
+
+        assertFalse(account.getTags().contains(newTag));
+
+    }
 
 
 }
