@@ -21,7 +21,7 @@
 
 ---
 
-## 기술스택
+## 기술 스택
 
 ### IDE
 * IntelliJ (Ultimate)
@@ -43,6 +43,7 @@
 * Query DSL
 * Devtools
 * ModelMapper
+* Gmail SMTP (메일 전송) 
 
 ### FRONTEND
 * Bootstrap

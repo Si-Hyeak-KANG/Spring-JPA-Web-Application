@@ -1,14 +1,14 @@
 package com.practice.studyolle.account;
 
 import com.practice.studyolle.domain.Account;
+import com.practice.studyolle.mail.EmailMessage;
+import com.practice.studyolle.mail.EmailService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,7 +35,7 @@ class AccountControllerTest {
     AccountRepository accountRepository;
 
     @MockBean
-    JavaMailSender javaMailSender;
+    EmailService emailService;
 
     @DisplayName("회원 가입 화면 보이는지 테스트")
     @Test
@@ -86,7 +86,7 @@ class AccountControllerTest {
         // 저장된 회원의 Token 이 null 이 아닌지 체크
         assertNotNull(account.getEmailCheckToken());
         // JavaMailSender 에서 SimpleMailMessage 인스턴스를 send 하는 메서드를 호출하는지 체크
-        then(javaMailSender).should().send(any(SimpleMailMessage.class));
+        then(emailService).should().send(any(EmailMessage.class));
     }
 
     @DisplayName("인증 메일 확인 - 입력값 오류")
