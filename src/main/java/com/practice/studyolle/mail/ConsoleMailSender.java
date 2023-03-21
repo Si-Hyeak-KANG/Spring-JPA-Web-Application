@@ -13,7 +13,7 @@ import java.io.InputStream;
 
 // 콘솔에 메일 내용을 출력하도록 임시로 설정
 // 로컬 환경에서 실행할 때 등록될 빈
-@Profile("local")
+@Profile({"local","dev","mysql"})
 @Component
 @Slf4j
 public class ConsoleMailSender implements JavaMailSender {
