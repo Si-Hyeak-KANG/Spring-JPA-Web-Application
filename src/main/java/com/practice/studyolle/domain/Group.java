@@ -19,7 +19,7 @@ import java.util.Set;
 @Getter @Setter
 @NoArgsConstructor @AllArgsConstructor
 @Builder @EqualsAndHashCode(of = "id")
-public class Study {
+public class Group {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

@@ -1,6 +1,6 @@
 package com.practice.studyolle.study.validator;
 
-import com.practice.studyolle.study.StudyRepository;
+import com.practice.studyolle.study.GroupRepository;
 import com.practice.studyolle.study.form.StudyForm;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -11,7 +11,7 @@ import org.springframework.validation.Validator;
 @RequiredArgsConstructor
 public class StudyFormValidator implements Validator {
 
-    private final StudyRepository studyRepository;
+    private final GroupRepository groupRepository;
 
 
     @Override
@@ -22,7 +22,7 @@ public class StudyFormValidator implements Validator {
     @Override
     public void validate(Object target, Errors errors) {
         StudyForm studyForm = (StudyForm) target;
-        if (studyRepository.existsByPath(studyForm.getPath())) {
+        if (groupRepository.existsByPath(studyForm.getPath())) {
             errors.rejectValue("path", "wrong.path","해당 스터디 경로값을 사용할 수 없습니다.");
         }
     }
