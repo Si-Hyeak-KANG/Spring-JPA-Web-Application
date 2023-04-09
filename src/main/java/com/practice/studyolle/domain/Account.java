@@ -1,5 +1,6 @@
 package com.practice.studyolle.domain;
 
+import com.practice.studyolle.domain.study.Study;
 import lombok.*;
 
 import javax.persistence.*;

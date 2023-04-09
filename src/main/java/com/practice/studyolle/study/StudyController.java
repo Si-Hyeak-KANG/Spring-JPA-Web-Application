@@ -2,7 +2,7 @@ package com.practice.studyolle.study;
 
 import com.practice.studyolle.account.CurrentAccount;
 import com.practice.studyolle.domain.Account;
-import com.practice.studyolle.domain.Study;
+import com.practice.studyolle.domain.study.Study;
 import com.practice.studyolle.study.form.StudyForm;
 import com.practice.studyolle.study.validator.StudyFormValidator;
 import lombok.RequiredArgsConstructor;

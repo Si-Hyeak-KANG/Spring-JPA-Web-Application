@@ -3,7 +3,7 @@ package com.practice.studyolle.study;
 import com.practice.studyolle.WithAccount;
 import com.practice.studyolle.account.AccountRepository;
 import com.practice.studyolle.domain.Account;
-import com.practice.studyolle.domain.Study;
+import com.practice.studyolle.domain.study.Study;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
@@ -28,13 +28,17 @@ class StudyControllerTest {
 
     @Autowired
     MockMvc mockMvc;
-    @Autowired StudyService studyService;
-    @Autowired StudyRepository studyRepository;
+    @Autowired
+    StudyService studyService;
+    @Autowired
+    StudyRepository studyRepository;
     @Autowired
     AccountRepository accountRepository;
 
     @AfterEach
-    void afterEach() {accountRepository.deleteAll();}
+    void afterEach() {
+        accountRepository.deleteAll();
+    }
 
     @WithAccount("test")
     @DisplayName("스터디 개설 폼 조회")
@@ -53,15 +57,15 @@ class StudyControllerTest {
     void createStudy_success() throws Exception {
 
         mockMvc.perform(post("/new-study")
-                .param("path", "test-path")
-                .param("title", "study title")
-                .param("shortDescription", "short description")
-                .param("fullDescription", "full description")
-                .with(csrf()))
+                        .param("path", "test-path")
+                        .param("title", "study title")
+                        .param("shortDescription", "short description")
+                        .param("fullDescription", "full description")
+                        .with(csrf()))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/study/test-path"));
 
-        Study study = studyRepository.findByPath("test-path");
+        Study study = studyService.getStudy("test-path");
         assertNotNull(study);
         Account account = accountRepository.findByNickname("test");
         assertTrue(study.getManagers().contains(account));
@@ -71,19 +75,20 @@ class StudyControllerTest {
     @DisplayName("스터디 개설 - 실패")
     @Test
     void createStudy_fail() throws Exception {
+        // validation error
         mockMvc.perform(post("/new-study")
-                .param("path", "wrong path")
-                .param("title", "study title")
-                .param("shortDescription","short description")
-                .param("fullDescription", "full description")
-                .with(csrf()))
+                        .param("path", "wrong path")
+                        .param("title", "study title")
+                        .param("shortDescription", "short description")
+                        .param("fullDescription", "full description")
+                        .with(csrf()))
                 .andExpect(status().isOk())
                 .andExpect(view().name("study/form"))
                 .andExpect(model().hasErrors())
                 .andExpect(model().attributeExists("studyForm"))
                 .andExpect(model().attributeExists("account"));
 
-        Study study = studyRepository.findByPath("test-path");
+        Study study = studyRepository.findByPath("test-path").orElse(null);
         assertNull(study);
     }
 
@@ -98,14 +103,13 @@ class StudyControllerTest {
         study.setFullDescription("<p> full description </p>");
 
         Account account = accountRepository.findByNickname("test");
-        studyService.createNewStudy(study,account);
+        studyService.createNewStudy(study, account);
 
         mockMvc.perform(get("/study/test-path"))
                 .andExpect(view().name("study/view"))
                 .andExpect(model().attributeExists("account"))
                 .andExpect(model().attributeExists("study"));
     }
-
 
 
 }

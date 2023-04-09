@@ -1,7 +1,7 @@
 package com.practice.studyolle.study;
 
 import com.practice.studyolle.domain.Account;
-import com.practice.studyolle.domain.Study;
+import com.practice.studyolle.domain.study.Study;
 import com.practice.studyolle.study.form.StudyDescriptionForm;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -19,6 +19,7 @@ public class StudyService {
 
     public Study createNewStudy(Study study, Account account) {
         Study newStudy = studyRepository.save(study);
+        newStudy.setImageDefault();
         newStudy.addManager(account);
         return newStudy;
     }
@@ -39,5 +40,21 @@ public class StudyService {
 
     public void updateStudyDescription(Study study, StudyDescriptionForm studyDescriptionForm) {
         modelMapper.map(studyDescriptionForm, study);
+    }
+
+    public void updateStudyImage(Study study, String image) {
+        study.setImage(image);
+    }
+
+    public void enableStudyBanner(Study study) {
+        study.setUseBanner(true);
+    }
+
+    public void disableStudyBanner(Study study) {
+        study.setUseBanner(false);
+    }
+
+    public void updateBannerDefault(Study study) {
+        study.setImageDefault();
     }
 }

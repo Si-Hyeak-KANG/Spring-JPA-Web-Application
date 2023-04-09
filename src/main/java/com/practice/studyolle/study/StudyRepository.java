@@ -1,12 +1,11 @@
 package com.practice.studyolle.study;
 
-import com.practice.studyolle.domain.Study;
+import com.practice.studyolle.domain.study.Study;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.Entity;
 import java.util.Optional;
 
 @Repository

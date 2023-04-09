@@ -2,7 +2,7 @@ package com.practice.studyolle.study;
 
 import com.practice.studyolle.account.CurrentAccount;
 import com.practice.studyolle.domain.Account;
-import com.practice.studyolle.domain.Study;
+import com.practice.studyolle.domain.study.Study;
 import com.practice.studyolle.study.form.StudyDescriptionForm;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -52,6 +52,50 @@ public class StudySettingsController {
         studyService.updateStudyDescription(study, studyDescriptionForm);
         attributes.addFlashAttribute("message", "스터디 소개를 수정했습니다.");
         return "redirect:/study/" + getPath(path) + "/settings/description";
+    }
+
+    @GetMapping("/banner")
+    public String studyImageForm(@CurrentAccount Account account, @PathVariable String path, Model model) {
+        Study study = studyService.getStudyToUpdate(account, path);
+        model.addAttribute(study);
+        model.addAttribute(account);
+        return "study/settings/banner";
+    }
+
+    /*
+     # MEMO
+     톰켓 기본 요청 사이즈는 2MB. 그 이상은 에러 발생.
+     만약 더 큰 요량을 받고 싶은 경우엔 Properties 에서 조정
+     ex) server.tomcat.max-http-form-post-size = 5MB
+     */
+    @PostMapping("/banner")
+    public String studyImageSubmit(@CurrentAccount Account account, @PathVariable String path,
+                                    String image, RedirectAttributes attributes) {
+        Study study = studyService.getStudyToUpdate(account, path);
+        studyService.updateStudyImage(study, image);
+        attributes.addFlashAttribute("message","스터디 이미지를 수정했습니다.");
+        return "redirect:/study/" + getPath(path) + "/settings/banner";
+    }
+
+    @PostMapping("/banner/enable")
+    public String enableStudyBanner(@CurrentAccount Account account, @PathVariable String path) {
+        Study study = studyService.getStudyToUpdate(account, path);
+        studyService.enableStudyBanner(study);
+        return "redirect:/study/" + getPath(path) + "/settings/banner";
+    }
+
+    @PostMapping("/banner/disable")
+    public String disableStudyBanner(@CurrentAccount Account account, @PathVariable String path) {
+        Study study = studyService.getStudyToUpdate(account, path);
+        studyService.disableStudyBanner(study);
+        return "redirect:/study/" + getPath(path) + "/settings/banner";
+    }
+
+    @PostMapping("/banner/default")
+    public String updateDefaultBanner(@CurrentAccount Account account, @PathVariable String path) {
+        Study study = studyService.getStudyToUpdate(account, path);
+        studyService.updateBannerDefault(study);
+        return "redirect:/study/" + getPath(path) + "/settings/banner";
     }
 
     private String getPath(String path) {
