@@ -261,7 +261,7 @@
 	</nav>
 </div>
 
-
+<!-- STUDY MEMBER LIST -->
 <div th:fragment="member-list (members, isManager)" class="row px-3 justify-content-center">
 	<ul class="list-unstyled col-10">
 		<li class="d-flex media mt-3" th:each="member: ${members}">
@@ -274,6 +274,56 @@
 			</div>
 		</li>
 	</ul>
+</div>
+
+<!-- STUDY SEEGINS MENU -->
+<div th:fragment="study-settings-menu (currentMenu)" class="list-group">
+	<a class="list-group-item list-group-item-action" th:classappend="${currentMenu == 'description'}? active"
+	   href="#" th:href="@{'/study/' + ${study.path} + '/settings/description'}">소개</a>
+	<a class="list-group-item list-group-item-action" th:classappend="${currentMenu == 'image'}? active"
+	   href="#" th:href="@{'/study/' + ${study.path} + '/settings/image'}">배너 이미지</a>
+	<a class="list-group-item list-group-item-action" th:classappend="${currentMenu == 'tags'}? active"
+	   href="#" th:href="@{'/study/' + ${study.path} + '/settings/tags'}">스터디 주제</a>
+	<a class="list-group-item list-group-item-action" th:classappend="${currentMenu == 'zones'}? active"
+	   href="#" th:href="@{'/study/' + ${study.path} + '/settings/zones'}">활동 지역</a>
+	<a class="list-group-item list-group-item-action list-group-item-danger" th:classappend="${currentMenu == 'study'}? active"
+	   href="#" th:href="@{'/study/' + ${study.path} + '/settings/study'}">스터디</a>
+</div>
+
+<!-- EDITOR SCRIPT (FULL DESCRIPTION)-->
+<div th:fragment="editor-script">
+	<script src="/node_modules/summernote/dist/summernote-bs4.js"></script>
+	<script type="application/javascript">
+		$(function () {
+			$('#fullDescription').summernote({
+				fontNames: ['Arial', 'Arial Black', 'Comic Sans MS', 'Courier New', 'Noto Sans KR', 'Merriweather'],
+				placeholder: '스터디의 목표, 일정, 진행 방식, 사용할 교재 또는 인터넷 강좌 그리고 모집중인 스터디원 등 스터디에 대해 자세히 적어 주세요.',
+				tabsize: 2,
+				height: 300
+			});
+		});
+	</script>
+</div>
+
+<!-- EDIT SUCCESS MESSAGE -->
+<div th:fragment="message (isProfile)">
+	<div th:if="${message}" class="alert alert-info alert-dismissible fade show mt-3" role="alert"
+	     id="success-message">
+		<span th:text="${message}">메시지</span>
+		<a th:if="${isProfile}" class="mx-2" th:href="@{'/profile/' + ${account.nickname}}" >프로필로 돌아가기</a>
+		<button type="button" class="btn-close" data-dismiss="alert" aria-label="Close" onclick="closeAlert()">
+			<span aria-hidden="true"></span>
+		</button>
+	</div>
+</div>
+
+<!-- EDIT SUCCESS MESSAGE FUNCTION -->
+<div th:fragment="message-script">
+	<script type="application/javascript">
+		function closeAlert() {
+			$('#success-message').hide();
+		}
+	</script>
 </div>
 
 </html>

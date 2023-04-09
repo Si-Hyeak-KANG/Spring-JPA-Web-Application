@@ -85,4 +85,8 @@ public class Account {
                 LocalDateTime.now().minusMinutes(3)
         );
     }
+
+    public boolean isManagerOf(Study study) {
+        return study.getManagers().contains(this);
+    }
 }

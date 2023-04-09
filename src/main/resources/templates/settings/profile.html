@@ -12,14 +12,7 @@
 		</div>
 
 		<div class="col-8">
-			<div th:if="${message}" class="alert alert-info alert-dismissible fade show mt-3" role="alert"
-			     id="success-message">
-				<span th:text="${message}">메시지</span>
-				<a class="mx-2" th:href="@{'/profile/' + ${account.nickname}}">프로필로 돌아가기</a>
-				<button type="button" class="btn-close" data-dismiss="alert" aria-label="Close" onclick="closeAlert()">
-					<span aria-hidden="true"></span>
-				</button>
-			</div>
+			<div th:replace="fragments.html :: message(true)"></div>
 			<div class="row">
 				<h2 class="col-sm-12" th:text="${account.nickname}">james</h2>
 			</div>

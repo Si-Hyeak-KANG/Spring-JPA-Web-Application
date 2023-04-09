@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.Entity;
+import java.util.Optional;
 
 @Repository
 @Transactional(readOnly = true)
@@ -18,5 +19,5 @@ public interface StudyRepository extends JpaRepository<Study, Long> {
     // db에 여러번 요청할 것이냐 vs db에 무거운 요청을 한번 할 것이냐
     // 추후 요청이 많이 들어올 상황을 생각했을 땐 (예를 들어 사용자가 많아졌을때) 쿼리를 줄이는 방법은 좋은 방법
     @EntityGraph(value = "Study.withAll", type = EntityGraph.EntityGraphType.LOAD)
-    Study findByPath(String path);
+    Optional<Study> findByPath(String path);
 }
