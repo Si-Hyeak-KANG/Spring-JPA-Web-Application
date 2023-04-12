@@ -1,4 +1,4 @@
-package com.practice.studyolle.settings.form;
+package com.practice.studyolle.zone;
 
 import com.practice.studyolle.domain.Zone;
 import lombok.Data;

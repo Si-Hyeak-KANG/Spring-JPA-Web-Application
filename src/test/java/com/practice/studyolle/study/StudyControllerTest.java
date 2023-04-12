@@ -88,7 +88,7 @@ class StudyControllerTest {
                 .andExpect(model().attributeExists("studyForm"))
                 .andExpect(model().attributeExists("account"));
 
-        Study study = studyRepository.findByPath("test-path").orElse(null);
+        Study study = studyRepository.findByPath("test-path");
         assertNull(study);
     }
 

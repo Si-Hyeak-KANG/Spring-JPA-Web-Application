@@ -1,6 +1,8 @@
 package com.practice.studyolle.study;
 
 import com.practice.studyolle.domain.Account;
+import com.practice.studyolle.domain.Tag;
+import com.practice.studyolle.domain.Zone;
 import com.practice.studyolle.domain.study.Study;
 import com.practice.studyolle.study.form.StudyDescriptionForm;
 import lombok.RequiredArgsConstructor;
@@ -26,16 +28,14 @@ public class StudyService {
 
     public Study getStudyToUpdate(Account account, String path) {
         Study study = this.getStudy(path);
-        if (!account.isManagerOf(study)) {
-           throw new AccessDeniedException("해당 기능을 사용할 수 없습니다.");
-        }
-
+        checkIfManager(account, study);
         return study;
     }
 
     public Study getStudy(String path) {
-        return studyRepository.findByPath(path)
-                .orElseThrow(() -> new IllegalArgumentException(path + "에 해당하는 스터디가 없습니다."));
+        Study study = studyRepository.findByPath(path);
+        checkIfExistingStudy(path, study);
+        return study;
     }
 
     public void updateStudyDescription(Study study, StudyDescriptionForm studyDescriptionForm) {
@@ -57,4 +57,47 @@ public class StudyService {
     public void updateBannerDefault(Study study) {
         study.setImageDefault();
     }
+
+    public Study getStudyToUpdateTag(Account account, String path) {
+        Study study = studyRepository.findAccountWithTagsByPath(path);
+        checkIfExistingStudy(path, study);
+        checkIfManager(account, study);
+        return null;
+    }
+
+    public Study getStudyToUpdateZone(Account account, String path) {
+        Study study = studyRepository.findAccountWithZonesByPath(path);
+        checkIfExistingStudy(path, study);
+        checkIfManager(account, study);
+        return study;
+    }
+
+    private void checkIfManager(Account account, Study study) {
+        if (!account.isManagerOf(study)) {
+            throw new AccessDeniedException("해당 기능을 사용할 수 없습니다.");
+        }
+    }
+
+    private void checkIfExistingStudy(String path, Study study) {
+        if (study == null) {
+            throw new IllegalArgumentException(path + "에 해당하는 스터디가 없습니다.");
+        }
+    }
+
+    public void addTag(Study study, Tag tag) {
+        study.getTags().add(tag);
+    }
+
+    public void removeTag(Study study, Tag tag) {
+        study.getTags().remove(tag);
+    }
+
+    public void addZone(Study study, Zone zone) {
+        study.getZones().add(zone);
+    }
+
+    public void removeZone(Study study, Zone zone) {
+        study.getZones().remove(zone);
+    }
 }
+

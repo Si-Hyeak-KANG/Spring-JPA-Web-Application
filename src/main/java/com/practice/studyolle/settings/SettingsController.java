@@ -10,7 +10,10 @@ import com.practice.studyolle.domain.Zone;
 import com.practice.studyolle.settings.form.*;
 import com.practice.studyolle.settings.validator.NicknameValidator;
 import com.practice.studyolle.settings.validator.PasswordFormValidator;
+import com.practice.studyolle.tag.TagForm;
 import com.practice.studyolle.tag.TagRepository;
+import com.practice.studyolle.tag.TagService;
+import com.practice.studyolle.zone.ZoneForm;
 import com.practice.studyolle.zone.ZoneRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -51,8 +54,10 @@ public class SettingsController {
     private final AccountService accountService;
     private final NicknameValidator nicknameValidator;
     private final TagRepository tagRepository;
+    private final TagService tagService;
     private final ZoneRepository zoneRepository;
     private final ObjectMapper objectMapper;
+
 
     @InitBinder("passwordForm")
     public void passwordFormInitBinder(WebDataBinder webDataBinder) {
@@ -170,15 +175,7 @@ public class SettingsController {
     @PostMapping(TAGS + "/add")
     @ResponseBody
     public ResponseEntity addTags(@CurrentAccount Account account, @RequestBody TagForm tagForm) {
-        String title = tagForm.getTagTitle();
-
-        // 있으면 조회, 없으면 새로 저장 후 조회
-        Tag tag = tagRepository.findByTitle(title).orElseGet(() ->
-                tagRepository.save(Tag.builder()
-                        .title(title)
-                        .build()
-                )
-        );
+        Tag tag = tagService.findOrCreateNew(tagForm.getTagTitle());
         accountService.addTag(account, tag);
         return ResponseEntity.ok().build();
     }

@@ -349,4 +349,110 @@
 	</script>
 </div>
 
+<!-- UPDATE TAG SCRIPT -->
+<div th:fragment="update-tags (baseUrl)">
+	<script src="/node_modules/@yaireo/tagify/dist/tagify.min.js"></script>
+	<script type="application/javascript">
+
+		// FORM 뿐만아니라 ajax도 POST 요청시 csrf 토큰 전송 필요
+		$(function () {
+			function tagRequest(url, tagTitle) {
+				$.ajax({
+					dataType: "json",
+					autocomplete: {
+						enabled: true,
+						rightKey: true,
+					},
+					contentType: "application/json; charset=utf-8",
+					method: "POST",
+					url: "[(${baseUrl})]" + url,
+					data: JSON.stringify({'tagTitle': tagTitle})
+				}).done(function (data, status) {
+					console.log("${data} and status is ${status}");
+				});
+			}
+
+			function onAdd(e) {
+				tagRequest("/add", e.detail.data.value);
+			}
+
+			function onRemove(e) {
+				tagRequest("/remove", e.detail.data.value);
+			}
+
+			var tagInput = document.querySelector("#tags");
+
+			var tagify = new Tagify(tagInput, {
+				pattern: /^.{0,20}$/,
+				whitelist: JSON.parse(document.querySelector("#whitelist").textContent),
+				dropdown : {
+					enabled: 1, // suggest tags after a single character input
+				} // map tags
+			});
+
+			tagify.on("add", onAdd);
+			tagify.on("remove", onRemove);
+
+			// add a class to Tagify's input element
+			tagify.DOM.input.classList.add('form-control');
+			// re-place Tagify's input element outside of the  element (tagify.DOM.scope), just before it
+			// 아래 코드는 3.5.1 버전까지 적용됨, 현재 outside 는 자동 적용..?
+			// tagify.DOM.scope.parentNode.insertBefore(tagify.DOM.input, tagify.DOM.scope);
+		});
+	</script>
+</div>
+
+<!-- UPDATE ZONE SCRIPT -->
+<div th:fragment="update-zones (baseUrl)">
+	<script src="/node_modules/@yaireo/tagify/dist/tagify.min.js"></script>
+	<script type="application/javascript">
+
+		// FORM 뿐만아니라 ajax도 POST 요청시 csrf 토큰 전송 필요
+		$(function () {
+			function tagRequest(url, zoneName) {
+				$.ajax({
+					dataType: "json",
+					autocomplete: {
+						enabled: true,
+						rightKey: true,
+					},
+					contentType: "application/json; charset=utf-8",
+					method: "POST",
+					url: "[(${baseUrl})]" + url,
+					data: JSON.stringify({'zoneName': zoneName})
+				}).done(function (data, status) {
+					console.log("${data} and status is ${status}");
+				});
+			}
+
+			function onAdd(e) {
+				tagRequest("/add", e.detail.data.value);
+			}
+
+			function onRemove(e) {
+				tagRequest("/remove", e.detail.data.value);
+			}
+
+			var tagInput = document.querySelector("#zones");
+
+			var tagify = new Tagify(tagInput, {
+				pattern: /^.{0,20}$/,
+				whitelist: JSON.parse(document.querySelector("#whitelist").textContent),
+				dropdown : {
+					enabled: 1, // suggest tags after a single character input
+				} // map tags
+			});
+
+			tagify.on("add", onAdd);
+			tagify.on("remove", onRemove);
+
+			// add a class to Tagify's input element
+			tagify.DOM.input.classList.add('form-control');
+			// re-place Tagify's input element outside of the  element (tagify.DOM.scope), just before it
+			// 아래 코드는 3.5.1 버전까지 적용됨, 현재 outside 는 자동 적용..?
+			// tagify.DOM.scope.parentNode.insertBefore(tagify.DOM.input, tagify.DOM.scope);
+		});
+	</script>
+</div>
+
 </html>
