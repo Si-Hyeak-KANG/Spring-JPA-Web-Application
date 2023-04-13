@@ -243,12 +243,12 @@
 		<div class="col-10">
 			<p>
                 <span th:each="tag: ${study.tags}"
-                      class="font-weight-light text-monospace badge badge-pill badge-info mr-3">
+                      class="font-weight-light text-monospace badge badge-pill badge-info mr-3 p-1" style="background-color: #31708F; margin: 0 3px;">
                     <a th:href="@{'/search/tag/' + ${tag.title}}" class="text-decoration-none text-white">
                         <i class="fa fa-tag"></i> <span th:text="${tag.title}">Tag</span>
                     </a>
                 </span>
-				<span th:each="zone: ${study.zones}" class="font-weight-light text-monospace badge badge-primary mr-3">
+				<span th:each="zone: ${study.zones}" class="font-weight-light text-monospace badge badge-primary mr-3 p-1" style="background-color: #337AB7; margin: 0 3px;">
                     <a th:href="@{'/search/zone/' + ${zone.id}}" class="text-decoration-none text-white">
                         <i class="fa fa-globe"></i> <span th:text="${zone.localNameOfCity}">City</span>
                     </a>
@@ -436,7 +436,7 @@
 			var tagInput = document.querySelector("#zones");
 
 			var tagify = new Tagify(tagInput, {
-				pattern: /^.{0,20}$/,
+				pattern: /^.{0,40}$/,
 				whitelist: JSON.parse(document.querySelector("#whitelist").textContent),
 				dropdown : {
 					enabled: 1, // suggest tags after a single character input

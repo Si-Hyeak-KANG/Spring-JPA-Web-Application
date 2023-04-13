@@ -23,7 +23,7 @@
 					<div id="whitelist" th:text="${whitelist}" hidden>
 					</div>
 					<input id="tags" type="text" name="tags" th:value="${#strings.listJoin(tags, ',')}"
-					       class="tagify-outside" aria-describedby="tagHelp">
+					       class="tagify-outside" placeholder="참여하고 싶은 주제(태그)를 입력해주세요." aria-describedby="tagHelp"/>
 				</div>
 			</div>
 		</div>

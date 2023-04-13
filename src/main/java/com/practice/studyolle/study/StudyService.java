@@ -62,7 +62,7 @@ public class StudyService {
         Study study = studyRepository.findAccountWithTagsByPath(path);
         checkIfExistingStudy(path, study);
         checkIfManager(account, study);
-        return null;
+        return study;
     }
 
     public Study getStudyToUpdateZone(Account account, String path) {
