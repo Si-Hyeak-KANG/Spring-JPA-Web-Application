@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<title>스터디올래</title>
+</head>
+<body>
+<table border="0" cellpadding="0" cellspacing="0" width="100%" id="letterWrap" style="border-collapse: collapse;">
+	<tr>
+		<td align="center" valign="center" style="padding: 40px 40px 16px; background: #EBF0F6; cursor: default;">
+
+			<table border="0" cellpadding="0" cellspacing="0" width="520" id="letterBox" style="border-collapse: collapse; background: #FFFFFF; color: #34495D; border-radius: 10px;">
+				<tr>
+					<td align="center" valign="top">
+						<table border="0" cellpadding="0" cellspacing="0" width="100%" id="letterHead">
+							<tr>
+								<td width="48" align="left" valign="center" style="padding: 36px 10px 36px 36px;">
+									<img src="/images/logo_img.png" width="48" height="48">
+								</td>
+								<td align="left" valign="center" style="color: #34495D; font-weight: 600; font-size: 18px;">스터디올래 인증 메일</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+				<tr>
+					<td align="center" valign="top">
+						<table border="0" cellpadding="0" cellspacing="0" width="100%">
+							<tr>
+								<td align="left" valign="top" style="padding: 0 36px 32px; color: #677785; font-weight: 400; font-size: 15px; line-height: 24px; word-break: keep-all;">
+									안녕하세요. <span style="color: #268DFF" th:text="${nickname}"></span> 님 <br/>
+									아래 인증번호를 입력하고 인증을 완료해주세요.<br/>
+									인증번호는 발송 시점으로부터 5분간 유효합니다.
+								</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+				<tr>
+					<td align="center" valign="center">
+						<table border="0" cellpadding="0" cellspacing="0" width="100%" height="1" id="letterDivider"><tr><td style="height: 1px; border-top: 1px dotted #EBF0F6; font-size: 1px; line-height: 1px;">&nbsp;</td></tr></table>
+					</td>
+				</tr>
+				<tr>
+					<td align="center" valign="top">
+						<table border="0" cellpadding="0" cellspacing="0" width="100%" id="letterItem">
+							<tr>
+								<td align="left" valign="top" style="padding: 48px 36px 48px; color: #34495D; font-weight: 400; font-size: 32px;">
+									인증번호:&nbsp;
+									<strong style="color: #268DFF; font-weight: 700;" th:text="${nickname}"></strong>
+								</td>
+							</tr>
+							<tr>
+								<td align="center" valign="center">
+									<table border="0" cellpadding="0" cellspacing="0" width="100%" height="1" id="letterDivider"><tr><td style="height: 1px; border-top: 1px dotted #EBF0F6; font-size: 1px; line-height: 1px;">&nbsp;</td></tr></table>
+								</td>
+							</tr>
+							<tr>
+								<td align="center" valign="top" style="padding: 32px 36px;">
+									<a href="https://itemscout.io/" style="display: block; text-decoration: none; width: 220px; height: 52px; background: #F5F8FB; color: #99A4AE; font-weight: 500; font-size: 15px; line-height: 52px; text-align: center; border-radius: 8px;">스터디올래로 바로가기</a>
+								</td>
+							</tr>
+							<tr>
+								<td height="16" style="font-size:1px;line-height:1px;">&nbsp;</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+			</table>
+
+		</td>
+	</tr>
+	<tr>
+		<td align="center" valign="top" style="padding: 24px 0 48px; background: #EBF0F6; cursor: default;">
+			<table border="0" cellpadding="0" cellspacing="0" width="100%" id="letterFoot">
+				<tr>
+					<td align="center" valign="top" style="padding-top: 16px; color: #99A4AE; font-size: 13px; line-height: 24px;">
+						&copy; <strong>스터디올래</strong> 발신 전용 메일입니다.<br/>서비스 관련 문의는 채팅상담을 이용해주세요.
+					</td>
+				</tr>
+			</table>
+		</td>
+	</tr>
+</table>
+</body>
+</html>

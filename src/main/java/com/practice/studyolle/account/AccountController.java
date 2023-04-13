@@ -21,14 +21,12 @@ public class AccountController {
     private final AccountService accountService;
     private final AccountRepository accountRepository;
 
-
     // 커스텀 검증
     // signUpForm 데이터를 가진 메서드가 실행될 때마다 해당 메서드를 거침
     @InitBinder("signUpForm")
     public void initBinder(WebDataBinder webDataBinder) {
         webDataBinder.addValidators(signUpFormValidator);
     }
-
 
     @GetMapping("/sign-up")
     public String signUpForm(Model model) {
