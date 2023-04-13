@@ -190,27 +190,27 @@
 
 <!-- STUDY INFO -->
 <div th:fragment="study-info">
-	<div class="row pt-4 text-left justify-content-center bg-light">
+	<div class="row pt-4 mb-2 text-left justify-content-center bg-light">
 		<div class="col-6">
 			<a href="#" class="text-decoration-none" th:href="@{'/study/' + ${study.path}}">
 				<span class="h2" th:text="${study.title}">스터디 이름</span>
 			</a>
 		</div>
 		<div class="col-4 text-right justify-content-end">
-                <span th:if="${!study.published}"
+                <span th:if="${!study.published && !study.closed}"
                       class="d-inline-block" tabindex="0" data-toggle="tooltip" data-placement="bottom"
                       title="스터디 공개 준비중">
-                    <button class="btn btn-primary btn-sm" style="pointer-events: none;" type="button" disabled>DRAFT</button>
+                    <button class="btn btn-primary btn-sm" style="pointer-events: none;" type="button" disabled>PREPARE</button>
                 </span>
 			<span th:if="${study.closed}"
 			      class="d-inline-block" tabindex="0" data-toggle="tooltip" data-placement="bottom" title="스터디 종료함">
-                    <button class="btn btn-primary btn-sm" style="pointer-events: none;" type="button" disabled>CLOSED</button>
+                    <button class="btn btn-warning btn-sm" style="pointer-events: none;" type="button" disabled>CLOSED</button>
                 </span>
-			<span th:if="${!study.recruiting}"
+			<span th:if="${!study.recruiting && !study.closed}"
 			      class="d-inline-block ml-1" tabindex="0" data-toggle="tooltip" data-placement="bottom" title="팀원 모집중 아님">
-                    <button class="btn btn-primary btn-sm" style="pointer-events: none;" type="button" disabled>OFF</button>
+                    <button class="btn btn-secondary btn-sm" style="pointer-events: none;" type="button" disabled>OFF</button>
                 </span>
-			<span sec:authorize="isAuthenticated()" th:if="${study.isJoinable(#authentication.principal)}"
+			<span sec:authorize="isAuthenticated()" th:if="${study.isJoinable(#authentication.principal) && !study.closed}"
 			      class="btn-group" role="group" aria-label="Basic example">
                     <a class="btn btn-primary" th:href="@{'/study/' + ${study.path} + '/join'}">
                         스터디 가입
@@ -236,7 +236,7 @@
 	</div>
 	<div class="row justify-content-center bg-light">
 		<div class="col-10">
-			<p class="lead" th:text="${study.shortDescription}"></p>
+			<p class="lead" style="font-size: 1.05rem;" th:text="${study.shortDescription}"></p>
 		</div>
 	</div>
 	<div class="row justify-content-center bg-light">

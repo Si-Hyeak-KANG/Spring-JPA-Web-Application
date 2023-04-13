@@ -27,6 +27,9 @@ import static com.practice.studyolle.domain.study.StudyRandomImageList.getDefaul
         @NamedAttributeNode("zones"),
         @NamedAttributeNode("managers")
 })
+@NamedEntityGraph(name = "Study.withManagers", attributeNodes = {
+        @NamedAttributeNode("managers")
+})
 @Entity
 @Getter
 @Setter
@@ -71,7 +74,7 @@ public class Study {
 
     private LocalDateTime publishedDateTime;
 
-    private LocalDateTime closeDateTime;
+    private LocalDateTime closedDateTime;
 
     private LocalDateTime recruitingUpdateTime;
 
@@ -106,8 +109,51 @@ public class Study {
         this.image = image;
         this.setDefaultImage(false);
     }
+
     public void setImageDefault() {
         this.setImage(getDefaultImage());
         setDefaultImage(true);
+    }
+
+    public void publish() {
+        if (!this.closed && !this.published) {
+            this.published = true;
+            this.publishedDateTime = LocalDateTime.now();
+        } else {
+            throw new RuntimeException("스터디를 이미 공개했거나 종료했습니다.");
+        }
+    }
+
+    public void close() {
+        if (this.published && !this.closed) {
+            this.closed = true;
+            this.closedDateTime = LocalDateTime.now();
+        } else {
+            throw new RuntimeException("스터디를 공개하지 않았거나 이미 종료한 상태입니다.");
+        }
+    }
+
+    public void startRecruit() {
+        if (canUpdateRecruiting()) {
+            this.recruiting = true;
+            this.recruitingUpdateTime = LocalDateTime.now();
+        } else {
+            throw new RuntimeException("스터디를 공개하거나 30분 뒤 다시 시도하세요.");
+        }
+    }
+
+    public void stopRecruit() {
+        if (canUpdateRecruiting()) {
+            this.recruiting = false;
+            this.recruitingUpdateTime = LocalDateTime.now();
+        } else {
+            throw new RuntimeException("스터디를 공개하거나 30분 뒤 다시 시도하세요.");
+        }
+    }
+
+    public boolean canUpdateRecruiting() {
+        return this.published
+                && this.recruitingUpdateTime == null
+                || this.recruitingUpdateTime.isBefore(LocalDateTime.now().minusMinutes(30));
     }
 }
