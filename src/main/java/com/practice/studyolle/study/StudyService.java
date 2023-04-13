@@ -11,6 +11,8 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import static com.practice.studyolle.study.form.StudyForm.VALID_PATH_PATTERN;
+
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -122,6 +124,15 @@ public class StudyService {
 
     public void stopRecruit(Study study) {
         study.stopRecruit();
+    }
+
+    public boolean isValidPath(String path) {
+        if (!path.matches(VALID_PATH_PATTERN)) return false;
+        return !studyRepository.existsByPath(path);
+    }
+
+    public void updateStudyPath(Study study, String path) {
+        study.setPath(path);
     }
 }
 

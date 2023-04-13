@@ -330,7 +330,7 @@
 
 <!-- EDIT SUCCESS MESSAGE -->
 <div th:fragment="message (isProfile)">
-	<div th:if="${message}" class="alert alert-info alert-dismissible fade show mt-3" role="alert"
+	<div th:if="${message}" class="alert alert-success alert-dismissible fade show mt-3" role="alert"
 	     id="success-message">
 		<span th:text="${message}">메시지</span>
 		<a th:if="${isProfile}" class="mx-2" th:href="@{'/profile/' + ${account.nickname}}" >프로필로 돌아가기</a>
