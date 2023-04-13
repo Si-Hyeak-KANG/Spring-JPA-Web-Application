@@ -190,7 +190,7 @@
 
 <!-- STUDY INFO -->
 <div th:fragment="study-info">
-	<div class="row pt-4 mb-2 text-left justify-content-center bg-light">
+	<div class="row pt-4 text-left justify-content-center bg-light">
 		<div class="col-6">
 			<a href="#" class="text-decoration-none" th:href="@{'/study/' + ${study.path}}">
 				<span class="h2" th:text="${study.title}">스터디 이름</span>
@@ -329,7 +329,7 @@
 </script>
 
 <!-- EDIT SUCCESS MESSAGE -->
-<div th:fragment="message (isProfile)">
+<div th:fragment="message (isProfile)"단>
 	<div th:if="${message}" class="alert alert-success alert-dismissible fade show mt-3" role="alert"
 	     id="success-message">
 		<span th:text="${message}">메시지</span>
