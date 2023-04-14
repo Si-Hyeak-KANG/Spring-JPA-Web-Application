@@ -128,6 +128,7 @@ public class Study {
         if (this.published && !this.closed) {
             this.closed = true;
             this.closedDateTime = LocalDateTime.now();
+            this.published = false;
         } else {
             throw new RuntimeException("스터디를 공개하지 않았거나 이미 종료한 상태입니다.");
         }
@@ -155,5 +156,9 @@ public class Study {
         return this.published
                 && this.recruitingUpdateTime == null
                 || this.recruitingUpdateTime.isBefore(LocalDateTime.now().minusMinutes(30));
+    }
+
+    public boolean isRemovable() {
+        return !this.published; // TODO 모임을 했던 스터디는 삭제할 수 없다.
     }
 }
