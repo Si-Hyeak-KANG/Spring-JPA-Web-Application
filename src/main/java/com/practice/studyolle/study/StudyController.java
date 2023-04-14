@@ -51,7 +51,7 @@ public class StudyController {
         Study newStudy = studyService.createNewStudy(modelMapper.map(studyForm, Study.class), account);
 
         // path 가 한글일 수 있음 -> url 인코딩 필요
-        return "redirect:/study/" + URLEncoder.encode(newStudy.getPath(), StandardCharsets.UTF_8);
+        return "redirect:/study/" + newStudy.getEncodedPath();
     }
 
     @GetMapping("/study/{path}")
@@ -68,5 +68,19 @@ public class StudyController {
         model.addAttribute(account);
         model.addAttribute(study);
         return "study/members";
+    }
+
+    @GetMapping("/study/{path}/join")
+    public String joinStudy(@CurrentAccount Account account, @PathVariable String path) {
+        Study study = studyRepository.findStudyWithMembersByPath(path);
+        studyService.addMember(study, account);
+        return "redirect:/study/" + study.getEncodedPath() + "/members";
+    }
+
+    @GetMapping("/study/{path}/leave")
+    public String leaveStudy(@CurrentAccount Account account, @PathVariable String path) {
+        Study study = studyRepository.findStudyWithMembersByPath(path);
+        studyService.removeMember(study, account);
+        return "redirect:/study/" + study.getEncodedPath() + "/members";
     }
 }

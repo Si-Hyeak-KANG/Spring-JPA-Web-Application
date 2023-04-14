@@ -7,6 +7,8 @@ import com.practice.studyolle.domain.Zone;
 import lombok.*;
 
 import javax.persistence.*;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -29,6 +31,9 @@ import static com.practice.studyolle.domain.study.StudyRandomImageList.getDefaul
 })
 @NamedEntityGraph(name = "Study.withManagers", attributeNodes = {
         @NamedAttributeNode("managers")
+})
+@NamedEntityGraph(name = "Study.withMembers", attributeNodes = {
+        @NamedAttributeNode("members")
 })
 @Entity
 @Getter
@@ -160,5 +165,17 @@ public class Study {
 
     public boolean isRemovable() {
         return !this.published; // TODO 모임을 했던 스터디는 삭제할 수 없다.
+    }
+
+    public void addMember(Account account) {
+        this.getMembers().add(account);
+    }
+
+    public void removeMember(Account account) {
+        this.getMembers().remove(account);
+    }
+
+    public String getEncodedPath() {
+        return URLEncoder.encode(this.path, StandardCharsets.UTF_8);
     }
 }
