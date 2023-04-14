@@ -7,10 +7,11 @@
 <head th:fragment="head">
 	<meta charset="UTF-8">
 	<title>StudyOlle</title>
+	<link rel="stylesheet" href="/node_modules/bootstrap/dist/css/bootstrap.min.css"/>
+	<link rel="stylesheet" href="/node_modules/bootstrap/dist/css/bootstrap-grid.min.css"/>
 	<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500&display=swap" rel="stylesheet">
 	<link rel="preconnect" href="https://fonts.googleapis.com">
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-	<link rel="stylesheet" href="/node_modules/bootstrap/dist/css/bootstrap.css"/>
 	<link rel="stylesheet" href="/node_modules/font-awesome/css/font-awesome.min.css"/>
 	<link rel="stylesheet" href="/node_modules/@yaireo/tagify/dist/tagify.css"/>
 	<link rel="stylesheet" href="/node_modules/summernote/dist/summernote-bs4.min.css">
@@ -30,7 +31,6 @@
 			padding: 0;
 			margin: 0;
 		}
-
 
 		#study-logo {
 			height: 200px;
@@ -340,7 +340,7 @@
 	<script src="/node_modules/summernote/dist/summernote-bs4.js"></script>
 	<script type="application/javascript">
 		$(function () {
-			$('#fullDescription').summernote({
+			$('.editor').summernote({
 				fontNames: ['Arial', 'Arial Black', 'Comic Sans MS', 'Courier New', 'Noto Sans KR', 'Merriweather'],
 				placeholder: '스터디의 목표, 일정, 진행 방식, 사용할 교재 또는 인터넷 강좌 그리고 모집중인 스터디원 등 스터디에 대해 자세히 적어 주세요.',
 				tabsize: 2,
