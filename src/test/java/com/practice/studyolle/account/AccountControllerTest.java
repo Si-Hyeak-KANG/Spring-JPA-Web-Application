@@ -75,8 +75,7 @@ class AccountControllerTest {
                         .param("password", "12345678")
                         .with(csrf()))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(view().name("redirect:/"))
-                .andExpect(authenticated().withUsername("test"));
+                .andExpect(view().name("redirect:/login"));
 
         Account account = accountRepository.findByEmail("email@test.com");
         // 정상적으로 데이터를 저장했는지 체크

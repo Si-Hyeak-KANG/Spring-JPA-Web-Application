@@ -77,7 +77,6 @@
 						<div class="card-header">
 							프로필 이미지
 						</div>
-
 						<div id="current-profile-image" class="mt-3">
 							<img th:if="${#strings.isEmpty(profile.profileImage)}" src="/images/none_profile_image.jpeg"
 							     width="125" height="125" class="rounded" alt="프로필"/>
@@ -90,7 +89,6 @@
 						<div class="card-body">
 							<div class="custom-file">
 								<input type="file" class="custom-file-input" id="profile-image-file">
-								<label class="custom-file-label" for="profile-image-file">프로필 이미지 변경</label>
 							</div>
 							<div id="new-profile-image-control" class="mt-3">
 								<button class="btn btn-outline-primary btn-block" id="cut-button">자르기</button>
@@ -109,10 +107,8 @@
 <link href="/node_modules/cropper/dist/cropper.min.css" rel="stylesheet"/>
 <script src="/node_modules/cropper/dist/cropper.min.js"></script>
 <script src="/node_modules/jquery-cropper/dist/jquery-cropper.min.js"></script>
+<script th:replace="fragments.html :: message-script"></script>
 <script type="application/javascript">
-	function closeAlert() {
-		$('#success-message').hide();
-	}
 
 	$(function() {
 		cropper = '';

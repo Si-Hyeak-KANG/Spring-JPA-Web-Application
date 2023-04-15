@@ -51,11 +51,7 @@ class SettingsControllerTest {
     @Autowired
     ObjectMapper objectMapper;
 
-    private Zone testZone = Zone.builder()
-            .city("test")
-            .localNameOfCity("테스트시")
-            .province("테스트주")
-            .build();
+    private Zone testZone = Zone.builder().city("test").localNameOfCity("테스트시").province("테스트주").build();
 
     @BeforeEach
     void beforeEach() {
@@ -149,7 +145,11 @@ class SettingsControllerTest {
     @DisplayName("계정의 태그 수정 폼")
     @Test
     void updateTagsForm() throws Exception {
-        mockMvc.perform(get(ROOT + SETTINGS + TAGS)).andExpect(view().name(SETTINGS + TAGS)).andExpect(model().attributeExists("account")).andExpect(model().attributeExists("whitelist")).andExpect(model().attributeExists("tags"));
+        mockMvc.perform(get(ROOT + SETTINGS + TAGS))
+                .andExpect(view().name(SETTINGS + TAGS))
+                .andExpect(model().attributeExists("account"))
+                .andExpect(model().attributeExists("whitelist"))
+                .andExpect(model().attributeExists("tags"));
     }
 
     @WithAccount("test")
@@ -160,12 +160,15 @@ class SettingsControllerTest {
         TagForm tagForm = new TagForm();
         tagForm.setTagTitle("newTag");
 
-        mockMvc.perform(post(ROOT + SETTINGS + TAGS + "/add").contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON)
+        mockMvc.perform(post(ROOT + SETTINGS + TAGS + "/add")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
                 // .content("{\"tagTitle\" : \"newTag\"}") 이렇게 직접 쓸 수도 있음
-                .content(objectMapper.writeValueAsString(tagForm)).with(csrf())).andExpect(status().isOk());
+                .content(objectMapper.writeValueAsString(tagForm))
+                .with(csrf()))
+                .andExpect(status().isOk());
 
-
-        Tag newTag = tagRepository.findByTitle("newTag").get();
+        Tag newTag = tagRepository.findByTitle("newTag");
         assertNotNull(newTag);
         Account test = accountRepository.findByNickname("test");
         // 갖고온 객체가 detached 상태
@@ -207,11 +210,7 @@ class SettingsControllerTest {
         ZoneForm zoneForm = new ZoneForm();
         zoneForm.setZoneName(testZone.toString());
 
-        mockMvc.perform(post(ROOT + SETTINGS + ZONES + "/add")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(zoneForm))
-                .with(csrf()))
-                .andExpect(status().isOk());
+        mockMvc.perform(post(ROOT + SETTINGS + ZONES + "/add").contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(zoneForm)).with(csrf())).andExpect(status().isOk());
 
         Account account = accountRepository.findByNickname("test");
         Zone zone = zoneRepository.findByCityAndProvince(testZone.getCity(), testZone.getProvince());
@@ -229,11 +228,7 @@ class SettingsControllerTest {
         ZoneForm zoneForm = new ZoneForm();
         zoneForm.setZoneName(testZone.toString());
 
-        mockMvc.perform(post(ROOT + SETTINGS + ZONES + "/remove")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(zoneForm))
-                .with(csrf()))
-                .andExpect(status().isOk());
+        mockMvc.perform(post(ROOT + SETTINGS + ZONES + "/remove").contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(zoneForm)).with(csrf())).andExpect(status().isOk());
 
         assertFalse(account.getZones().contains(zone));
     }

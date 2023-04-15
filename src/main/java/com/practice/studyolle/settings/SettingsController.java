@@ -2,6 +2,7 @@ package com.practice.studyolle.settings;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.practice.studyolle.account.AccountRepository;
 import com.practice.studyolle.account.AccountService;
 import com.practice.studyolle.account.CurrentAccount;
 import com.practice.studyolle.domain.Account;
@@ -68,6 +69,8 @@ public class SettingsController {
     public void nicknameFormInitBinder(WebDataBinder webDataBinder) {
         webDataBinder.addValidators(nicknameValidator);
     }
+
+    // TODO : 기본 프로필 이미지 적용
 
     @GetMapping(PROFILE)
     public String updateProfileForm(@CurrentAccount Account account, Model model) {
@@ -185,11 +188,11 @@ public class SettingsController {
     public ResponseEntity removeTags(@CurrentAccount Account account, @RequestBody TagForm tagForm) {
         String title = tagForm.getTagTitle();
 
-        Optional<Tag> tag = tagRepository.findByTitle(title);
-        if (tag.isEmpty()) {
+        Tag tag = tagRepository.findByTitle(title);
+        if (tag == null) {
             return ResponseEntity.badRequest().build();
         }
-        accountService.removeTag(account, tag.get());
+        accountService.removeTag(account, tag);
         return ResponseEntity.ok().build();
     }
 

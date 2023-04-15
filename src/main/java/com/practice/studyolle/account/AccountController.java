@@ -46,8 +46,8 @@ public class AccountController {
             return "account/sign-up";
         }
         Account account = accountService.processNewAccount(signUpForm);
-        accountService.login(account);
-        return "redirect:/";
+        //accountService.login(account);
+        return "redirect:/login";
     }
 
     @GetMapping("/check-email-token")

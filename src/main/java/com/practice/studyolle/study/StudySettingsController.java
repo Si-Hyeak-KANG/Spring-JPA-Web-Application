@@ -141,11 +141,11 @@ public class StudySettingsController {
     public ResponseEntity removeTag(@CurrentAccount Account account, @PathVariable String path,
                                     @RequestBody TagForm tagForm) {
         Study study = studyService.getStudyToUpdateTag(account, path);
-        Optional<Tag> tag = tagRepository.findByTitle(tagForm.getTagTitle());
-        if (tag.isEmpty()) {
+        Tag tag = tagRepository.findByTitle(tagForm.getTagTitle());
+        if (tag == null) {
             return ResponseEntity.badRequest().build();
         }
-        studyService.removeTag(study, tag.get());
+        studyService.removeTag(study, tag);
         return ResponseEntity.ok().build();
     }
 
