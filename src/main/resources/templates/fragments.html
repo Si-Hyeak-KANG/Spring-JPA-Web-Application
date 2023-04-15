@@ -489,4 +489,34 @@
 	</script>
 </div>
 
+<!-- DATE TIME-->
+<div th:fragment="date-time">
+	<script src="/node_modules/moment/min/moment-with-locales.min.js"></script>
+	<script type="application/javascript">
+		$(function () {
+			$('[data-toggle="tooltip"]').tooltip();
+
+			moment.locale('ko');
+			$(".date-time").text(function(index, dateTime) {
+				return moment(dateTime, "YYYY-MM-DD`T`hh:mm").format('LLL');
+			});
+			$(".date").text(function(index, dateTime) {
+				return moment(dateTime, "YYYY-MM-DD`T`hh:mm").format('LL');
+			});
+			$(".weekday").text(function(index, dateTime) {
+				var weekday = moment(dateTime, "YYYY-MM-DD`T`hh:mm").format('dddd');
+				return "(" + weekday.charAt(0) + ")";
+			});
+			$(".time").text(function(index, dateTime) {
+				return moment(dateTime, "YYYY-MM-DD`T`hh:mm").format('LT');
+			});
+			$(".calendar").text(function(index, dateTime) {
+				return moment(dateTime, "YYYY-MM-DD`T`hh:mm").calendar();
+			});
+			$(".fromNow").text(function(index, dateTime) {
+				return moment(dateTime, "YYYY-MM-DD`T`hh:mm").fromNow();
+			});
+		})
+	</script>
+</div>
 </html>

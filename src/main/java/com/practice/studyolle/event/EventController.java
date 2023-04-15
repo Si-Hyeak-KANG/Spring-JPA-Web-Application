@@ -6,9 +6,12 @@ import com.practice.studyolle.domain.Event;
 import com.practice.studyolle.domain.study.Study;
 import com.practice.studyolle.event.form.EventForm;
 import com.practice.studyolle.event.validator.EventValidator;
+import com.practice.studyolle.study.StudyRepository;
 import com.practice.studyolle.study.StudyService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
@@ -16,12 +19,16 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Controller
 @RequestMapping("study/{path}")
 @RequiredArgsConstructor
 public class EventController {
 
+    private final StudyRepository studyRepository;
     private final StudyService studyService;
     private final EventService eventService;
     private final ModelMapper modelMapper;
@@ -61,7 +68,35 @@ public class EventController {
                            Model model) {
         model.addAttribute(account);
         model.addAttribute(eventRepository.findById(id).orElseThrow());
-        model.addAttribute(studyService.getStudy(path));
+        model.addAttribute(studyRepository.findStudyWithManagersByPath(path));
         return "event/view";
+    }
+
+    private static final Logger logger = LoggerFactory.getLogger(EventController.class);
+
+    @GetMapping("/events")
+    public String viewStudyEvents(@CurrentAccount Account account, @PathVariable String path, Model model) {
+
+        long start = System.currentTimeMillis();
+
+        Study study = studyService.getStudy(path);
+        model.addAttribute(account);
+        model.addAttribute(study);
+
+        List<Event> events = eventRepository.findByStudyOrderByStartDateTime(study);
+        List<Event> newEvents = new ArrayList<>();
+        List<Event> oldEvents = new ArrayList<>();
+        events.forEach(e -> {
+            if (e.alreadyEndEvent()) oldEvents.add(e);
+            else newEvents.add(e);
+        });
+        model.addAttribute("newEvents",newEvents);
+        model.addAttribute("oldEvents", oldEvents);
+
+        long finish = System.currentTimeMillis();
+        long timeMs = finish - start;
+
+        logger.info("RESPONSE : {} ms", timeMs);
+        return "study/events";
     }
 }

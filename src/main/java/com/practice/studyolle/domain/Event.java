@@ -14,6 +14,10 @@ import java.util.List;
 @Entity
 @Getter @Setter @EqualsAndHashCode(of = "id")
 @NoArgsConstructor
+@NamedEntityGraph(
+        name = "Event.withEnrollments",
+        attributeNodes = @NamedAttributeNode("enrollments")
+)
 public class Event {
 
     @Id
@@ -85,4 +89,13 @@ public class Event {
         return false;
     }
 
+    public boolean alreadyEndEvent() {
+        return this.getEndDateTime().isBefore(LocalDateTime.now());
+    }
+
+    public int numberOfRemainSpots() {
+        return this.limitOfEnrollments
+                - (int) this.enrollments.stream()
+                .filter(Enrollment::isAccepted).count();
+    }
 }
