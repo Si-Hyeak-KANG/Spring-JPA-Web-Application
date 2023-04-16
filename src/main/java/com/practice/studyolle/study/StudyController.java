@@ -83,4 +83,6 @@ public class StudyController {
         studyService.removeMember(study, account);
         return "redirect:/study/" + study.getEncodedPath() + "/members";
     }
+
+    // TODO 관리자 권한 부여 기능 구현
 }

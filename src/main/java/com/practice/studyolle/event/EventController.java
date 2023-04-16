@@ -76,9 +76,6 @@ public class EventController {
 
     @GetMapping("/events")
     public String viewStudyEvents(@CurrentAccount Account account, @PathVariable String path, Model model) {
-
-        long start = System.currentTimeMillis();
-
         Study study = studyService.getStudy(path);
         model.addAttribute(account);
         model.addAttribute(study);
@@ -93,10 +90,47 @@ public class EventController {
         model.addAttribute("newEvents",newEvents);
         model.addAttribute("oldEvents", oldEvents);
 
-        long finish = System.currentTimeMillis();
-        long timeMs = finish - start;
-
-        logger.info("RESPONSE : {} ms", timeMs);
         return "study/events";
+    }
+
+    @GetMapping("/events/{id}/edit")
+    public String updateEventForm(@CurrentAccount Account account,
+                                  @PathVariable String path, @PathVariable Long id, Model model) {
+        Study study = studyService.getStudyToUpdateStatus(account, path);
+        Event event = eventRepository.findById(id).orElseThrow();
+        model.addAttribute(study);
+        model.addAttribute(account);
+        model.addAttribute(event);
+        model.addAttribute(modelMapper.map(event, EventForm.class));
+        return "event/update-form";
+    }
+
+    @PostMapping("/events/{id}/edit")
+    public String updateEventSubmit(@CurrentAccount Account account, @PathVariable String path,
+                                    @PathVariable Long id, @Valid EventForm eventForm, Errors errors,
+                                    Model model) {
+        Study study = studyService.getStudyToUpdateStatus(account, path);
+        Event event = eventRepository.findById(id).orElseThrow();
+        eventForm.setEventType(event.getEventType());
+        eventValidator.validateUpdateForm(eventForm, event, errors);
+
+        if (errors.hasErrors()) {
+            model.addAttribute(account);
+            model.addAttribute(study);
+            model.addAttribute(event);
+            return "event/update-form";
+        }
+
+        eventService.updateEvent(event, eventForm);
+        return "redirect:/study/" + study.getEncodedPath() + "/events/" + event.getId();
+    }
+
+    // HTML 의 FORM 은 GET 과 POST 메서드만 지원
+    // Form 을 쓰면서 REST API 에 따른 Delete 메서드를 사용해보기
+    @DeleteMapping("/events/{id}")
+    public String cancelEvent(@CurrentAccount Account account, @PathVariable String path, @PathVariable Long id) {
+        Study study = studyService.getStudyToUpdateStatus(account, path);
+        eventService.deleteEvent(eventRepository.findById(id).orElseThrow());
+        return "redirect:/study/" + study.getEncodedPath() + "/events";
     }
 }

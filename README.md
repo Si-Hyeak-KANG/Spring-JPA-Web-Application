@@ -56,6 +56,7 @@
 * 위지윅 에디터
   * summernote
 * moment (date format)
+* Bootbox.js(모달창)
 * NPM
 * package.json
 `프론트 라이브러리는 git에 올려 관리하지 않기 때문에 maven build할 때 자동으로 설치하도록 설정`
