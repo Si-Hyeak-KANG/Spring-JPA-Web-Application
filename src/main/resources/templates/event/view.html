@@ -17,7 +17,7 @@
 		</div>
 		<div class="col-3 text-right justify-content-end">
                 <span sec:authorize="isAuthenticated()">
-	                <button th:if="${event.isClosed()}"
+	                <button th:if="${event.isClosed() && !event.isAttended(#authentication.principal)}"
 	                        class="btn btn-outline-primary" data-toggle="modal" data-target="#enroll" disabled>
                         <i class="fa fa-plus-circle"></i> 모집 마감
                     </button>
@@ -29,7 +29,7 @@
                             class="btn btn-outline-primary" data-toggle="modal" data-target="#disenroll">
                         <i class="fa fa-minus-circle"></i> 참가 신청 취소
                     </button>
-                    <span class="text-success" th:if="${event.isAttended(#authentication.principal)}" disabled>
+                    <span class="text-success" th:if="${event.isAttended(#authentication.principal)}" disabled style="margin-right: 10px">
                         <i class="fa fa-check-circle"></i> 참석 완료
                     </span>
                 </span>
