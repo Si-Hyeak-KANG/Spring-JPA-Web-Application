@@ -235,8 +235,7 @@
                        th:href="@{'/study/' + ${study.path} + '/join'}">
                         스터디 가입
                     </a>
-					<span th:if="${!account.emailVerified}" tabindex="0" data-toggle="tooltip" data-placement="bottom"
-					      title="이메일을 인증해주세요.">
+					<!-- TODO 이메일 인증을 하지 않은 회원은 스터디 가입 안됨 -->
                     <button class="d-inline-block ml-1 btn btn-secondary" disabled>스터디 가입</button>
                     </span>
                     <a class="btn btn-outline-primary" th:href="@{'/study/' + ${study.path} + '/members'}"
