@@ -17,7 +17,7 @@
 		</div>
 		<div class="col-3 text-right justify-content-end">
                 <span sec:authorize="isAuthenticated()">
-	                <button th:if="${!event.isEnrollableFor(#authentication.principal)}"
+	                <button th:if="${event.isClosed()}"
 	                        class="btn btn-outline-primary" data-toggle="modal" data-target="#enroll" disabled>
                         <i class="fa fa-plus-circle"></i> 모집 마감
                     </button>
@@ -36,8 +36,8 @@
 			<a class="btn btn-outline-secondary" th:href="@{'/study/' + ${study.path} + '/events'}"
 			   style="margin-right: 10px;">모임 목록</a>
 		</div>
-		<form th:action="@{'/study/' + ${study.path} + '/events/' + ${event.id} + '/join'}" id="enroll-frm"></form>
-		<form th:action="@{'/study/' + ${study.path} + '/events/' + ${event.id} + '/leave'}" id="dis-enroll-frm"></form>
+		<form th:action="@{'/study/' + ${study.path} + '/events/' + ${event.id} + '/enroll'}" id="enroll-frm" th:method="post"></form>
+		<form th:action="@{'/study/' + ${study.path} + '/events/' + ${event.id} + '/disenroll'}" id="dis-enroll-frm" th:method="post"></form>
 	</div>
 	<div class="row px-3 justify-content-center">
 		<div class="col-7 pt-3 mt-2" style="border-right: 2px solid #f0f0f0">
@@ -68,10 +68,8 @@
 						<td>
 							<a th:href="@{'/profile/' + ${enroll.account.nickname}}"
 							   class="text-decoration-none">
-								<svg th:if="${#strings.isEmpty(enroll.account?.profileImage)}"
-								     data-jdenticon-value="nickname"
-								     th:data-jdenticon-value="${enroll.account.nickname}" width="24" height="24"
-								     class="rounded border bg-light"></svg>
+								<img th:if="${#strings.isEmpty(enroll.account?.profileImage)}" src="/images/none_profile_image.jpeg"
+								     width="24" height="24" class="rounded border"/>
 								<img th:if="${!#strings.isEmpty(enroll.account?.profileImage)}"
 								     th:src="${enroll.account?.profileImage}" width="24" height="24"
 								     class="rounded border"/>
@@ -86,10 +84,9 @@
 							<span th:if="${!enroll.accepted}">대기중</span>
 						</td>
 						<td th:if="${study.isManager(#authentication.principal)}">
-							<a th:if="${event.isAcceptable(enroll)}" href="#" class="text-decoration-none"
-							   th:href="@{'/study/' + ${study.path} + '/events/' + ${event.id} + '/enrollments/' + ${enroll.id} + '/accept'}">신청
-								수락</a>
-							<a th:if="${event.isRejectable(enroll)}" href="#" class="text-decoration-none"
+							<a th:if="${event.canAccept(enroll)}" href="#" class="text-decoration-none"
+							   th:href="@{'/study/' + ${study.path} + '/events/' + ${event.id} + '/enrollments/' + ${enroll.id} + '/accept'}">신청 수락</a>
+							<a th:if="${event.canReject(enroll)}" href="#" class="text-decoration-none"
 							   th:href="@{'/study/' + ${study.path} + '/events/' + ${event.id} + '/enrollments/' + ${enroll.id} + '/reject'}">취소</a>
 						</td>
 						<td th:if="${study.isManager(#authentication.principal)}">
@@ -127,8 +124,8 @@
 			<dd>
 				<span class="date" th:text="${event.startDateTime}"></span>
 				<span class="weekday" th:text="${event.startDateTime}"></span><br/>
-				~ <span class="date" th:text="${event.endDateTime}"></span>
-				<span class="weekday" th:text="${event.endDateTime}"></span>
+				<span class="time" th:text="${event.startDateTime}"></span>
+				~ <span class="time" th:text="${event.endDateTime}"></span>
 			</dd>
 
 			<dt class="font-weight-light mt-3">모임장</dt>

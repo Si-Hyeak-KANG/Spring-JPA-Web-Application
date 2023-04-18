@@ -27,8 +27,10 @@
 				</div>
 				<div class="col mb-4 pr-0" th:each="event: ${newEvents}">
 					<div class="card">
-						<div class="card-header">
-							<span th:text="${event.title}">title</span>
+						<div class="card-header d-flex" style="justify-content: space-between; align-items: center;">
+							<span th:text="${event.title}" style="font-size: 1.2rem">title</span>
+							<a th:if="${event.eventType == T(com.practice.studyolle.domain.EventType).FCFS}" class="btn btn-primary disabled" style="width: fit-content; height: fit-content; font-size: 0.85rem">선착순</a>
+							<a th:if="${event.eventType == T(com.practice.studyolle.domain.EventType).CONFIRMATIVE}" class="btn btn-primary disabled" style="width: fit-content; height: fit-content; font-size: 0.85rem">관리자 확인</a>
 						</div>
 						<ul class="list-group list-group-flush">
 							<li class="list-group-item">
@@ -37,12 +39,15 @@
 								<span class="weekday" th:text="${event.startDateTime}"></span> 모임 시작
 							</li>
 							<li class="list-group-item">
-								<i class="fa fa-hourglass-end"></i> <span class="fromNow text-warning" th:text="${event.endEnrollmentDateTime}"></span> 모집 마감,
-								<span th:if="${event.limitOfEnrollments != 0}">
+								<i class="fa fa-hourglass-end"></i>
+								<span th:if="${!event.isClosed()}" class="fromNow text-warning" th:text="${event.endEnrollmentDateTime}"></span>
+								<span th:if="${!event.isClosed()}">모집 마감,</span>
+								<span th:if="${event.isClosed()}" class="text-danger">모집 마감</span>
+								<span th:if="${event.limitOfEnrollments != 0 && event.numberOfRemainSpots() > 0}">
                                     (<span th:text="${event.numberOfRemainSpots()}"></span> 자리 남음)
                                 </span>
-								<span th:if="${event.limitOfEnrollments == 0}" class="text-secondary">
-                                    자리 없음
+								<span th:if="${event.numberOfRemainSpots() == 0}" class="text-secondary" style="color: #99A4AE">
+                                    (자리 없음)
                                 </span>
 							</li>
 							<li class="list-group-item">

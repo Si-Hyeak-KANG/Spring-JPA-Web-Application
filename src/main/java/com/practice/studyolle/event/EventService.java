@@ -1,6 +1,7 @@
 package com.practice.studyolle.event;
 
 import com.practice.studyolle.domain.Account;
+import com.practice.studyolle.domain.Enrollment;
 import com.practice.studyolle.domain.Event;
 import com.practice.studyolle.domain.study.Study;
 import com.practice.studyolle.event.form.EventForm;
@@ -16,6 +17,7 @@ import java.time.LocalDateTime;
 @RequiredArgsConstructor
 public class EventService {
 
+    private final EnrollmentRepository enrollmentRepository;
     private final EventRepository eventRepository;
     private final ModelMapper modelMapper;
 
@@ -28,10 +30,28 @@ public class EventService {
 
     public void updateEvent(Event event, EventForm eventForm) {
         modelMapper.map(eventForm, event);
-        // TODO 선착순 모임의 경우, 모집 인원을 늘리면 대기 중인 인원이 자동으로 추가 인원에 맞게 참가 확정 상태로 변경
+        event.acceptWaitingList();
     }
 
     public void deleteEvent(Event event) {
         eventRepository.delete(event);
+    }
+
+    public void newEnrollment(Event event, Account account) {
+        if (!enrollmentRepository.existsByEventAndAccount(event, account)) {
+            Enrollment enrollment = new Enrollment();
+            enrollment.setEnrolledAt(LocalDateTime.now());
+            enrollment.setAccepted(event.isAbleToAcceptWaitingEnrollment());
+            enrollment.setAccount(account);
+            event.addEnrollment(enrollment);
+            enrollmentRepository.save(enrollment);
+        }
+    }
+
+    public void cancelEnrollment(Event event, Account account) {
+        Enrollment enrollment = enrollmentRepository.findByEventAndAccount(event, account);
+        event.removeEnrollment(enrollment);
+        enrollmentRepository.delete(enrollment);
+        event.acceptNextWaitingEnrollment();
     }
 }
