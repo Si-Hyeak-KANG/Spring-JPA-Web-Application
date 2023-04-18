@@ -31,11 +31,6 @@ public class StudyControllerTest {
     @Autowired protected StudyRepository studyRepository;
     @Autowired protected AccountRepository accountRepository;
 
-    @AfterEach
-    void afterEach() {
-        accountRepository.deleteAll();
-    }
-
     @WithAccount("test")
     @DisplayName("스터디 개설 폼 조회")
     @Test
@@ -105,6 +100,53 @@ public class StudyControllerTest {
                 .andExpect(view().name("study/view"))
                 .andExpect(model().attributeExists("account"))
                 .andExpect(model().attributeExists("study"));
+    }
+
+    @WithAccount("test")
+    @DisplayName("스터디 가입")
+    @Test
+    void joinStudy() throws Exception {
+        Account manager = createAccount("test2");
+
+        Study study = createStudy("test-study", manager);
+
+        mockMvc.perform(get("/study/" + study.getPath() + "/join"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/study/" + study.getPath() + "/members"));
+
+        Account member = accountRepository.findByNickname("test");
+        assertTrue(study.getMembers().contains(member));
+    }
+
+    @WithAccount("test")
+    @DisplayName("스터디 탈퇴")
+    @Test
+    void leaveStudy() throws Exception {
+        Account manager = createAccount("test2");
+        Study study = createStudy("test-study", manager);
+
+        Account member = accountRepository.findByNickname("test");
+        studyService.addMember(study, member);
+
+        mockMvc.perform(get("/study/" + study.getPath() + "/leave"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/study/" + study.getPath() + "/members"));
+        assertFalse(study.getMembers().contains(member));
+    }
+
+    protected Study createStudy(String path, Account manager) {
+        Study study = new Study();
+        study.setPath(path);
+        studyService.createNewStudy(study, manager);
+        return study;
+    }
+
+    protected Account createAccount(String nickname) {
+        Account account = new Account();
+        account.setNickname(nickname);
+        account.setEmail(nickname + "@email.com");
+        accountRepository.save(account);
+        return account;
     }
 
 }

@@ -60,7 +60,6 @@ class SettingsControllerTest {
 
     @AfterEach
     void afterEach() {
-        accountRepository.deleteAll();
         zoneRepository.deleteAll();
     }
 
