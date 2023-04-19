@@ -1,5 +1,6 @@
 package com.practice.studyolle.modules.main;
 
+import com.practice.studyolle.infra.MockMvcTest;
 import com.practice.studyolle.modules.account.AccountRepository;
 import com.practice.studyolle.modules.account.AccountService;
 import com.practice.studyolle.modules.account.form.SignUpForm;
@@ -19,18 +20,12 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@SpringBootTest
-@AutoConfigureMockMvc
-@Transactional
+@MockMvcTest
 class MainControllerTest {
 
-    @Autowired
-    MockMvc mockMvc;
-    @Autowired
-    AccountService accountService;
-
-    @Autowired
-    AccountRepository accountRepository;
+    @Autowired MockMvc mockMvc;
+    @Autowired AccountService accountService;
+    @Autowired AccountRepository accountRepository;
 
     @BeforeEach
     void beforeEach() {

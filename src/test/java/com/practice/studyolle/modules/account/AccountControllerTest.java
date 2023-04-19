@@ -1,5 +1,6 @@
 package com.practice.studyolle.modules.account;
 
+import com.practice.studyolle.infra.MockMvcTest;
 import com.practice.studyolle.infra.mail.EmailMessage;
 import com.practice.studyolle.infra.mail.EmailService;
 import com.practice.studyolle.modules.account.Account;
@@ -24,19 +25,13 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@SpringBootTest
-@AutoConfigureMockMvc
-@Transactional
+@MockMvcTest
 class AccountControllerTest {
 
-    @Autowired
-    private MockMvc mockMvc;
+    @Autowired private MockMvc mockMvc;
+    @Autowired AccountRepository accountRepository;
 
-    @Autowired
-    AccountRepository accountRepository;
-
-    @MockBean
-    EmailService emailService;
+    @MockBean EmailService emailService;
 
     @DisplayName("회원 가입 화면 보이는지 테스트")
     @Test

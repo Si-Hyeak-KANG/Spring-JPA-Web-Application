@@ -1,27 +1,21 @@
 package com.practice.studyolle.modules.account;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.practice.studyolle.modules.account.WithAccount;
-import com.practice.studyolle.modules.account.AccountRepository;
-import com.practice.studyolle.modules.account.AccountService;
-import com.practice.studyolle.modules.account.Account;
+import com.practice.studyolle.infra.MockMvcTest;
 import com.practice.studyolle.modules.tag.Tag;
-import com.practice.studyolle.modules.zone.Zone;
 import com.practice.studyolle.modules.tag.TagForm;
-import com.practice.studyolle.modules.zone.ZoneForm;
 import com.practice.studyolle.modules.tag.TagRepository;
+import com.practice.studyolle.modules.zone.Zone;
+import com.practice.studyolle.modules.zone.ZoneForm;
 import com.practice.studyolle.modules.zone.ZoneRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.transaction.annotation.Transactional;
 
 import static com.practice.studyolle.modules.account.SettingsController.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -30,26 +24,16 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@SpringBootTest
-@AutoConfigureMockMvc
-@Transactional
+@MockMvcTest
 class SettingsControllerTest {
 
-    @Autowired
-    MockMvc mockMvc;
-
-    @Autowired
-    AccountService accountService;
-    @Autowired
-    AccountRepository accountRepository;
-    @Autowired
-    PasswordEncoder passwordEncoder;
-    @Autowired
-    TagRepository tagRepository;
-    @Autowired
-    ZoneRepository zoneRepository;
-    @Autowired
-    ObjectMapper objectMapper;
+    @Autowired MockMvc mockMvc;
+    @Autowired AccountService accountService;
+    @Autowired AccountRepository accountRepository;
+    @Autowired PasswordEncoder passwordEncoder;
+    @Autowired TagRepository tagRepository;
+    @Autowired ZoneRepository zoneRepository;
+    @Autowired ObjectMapper objectMapper;
 
     private Zone testZone = Zone.builder().city("test").localNameOfCity("테스트시").province("테스트주").build();
 
