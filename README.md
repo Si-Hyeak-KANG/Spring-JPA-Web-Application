@@ -44,6 +44,7 @@
 * Devtools
 * ModelMapper
 * Gmail SMTP (메일 전송) 
+* ArchUnit (아키텍처 테스트 유틸리티)
 
 ### FRONTEND
 * Bootstrap
