@@ -40,7 +40,7 @@ public class SecurityConfig {
 
         http.rememberMe()
                 .userDetailsService(userDetailsService)
-                .tokenRepository(tokenRepository());
+                .tokenRepository(tokenRepository()).tokenValiditySeconds(60);
 
         return http.build();
     }

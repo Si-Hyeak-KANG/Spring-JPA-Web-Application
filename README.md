@@ -29,7 +29,7 @@
 ### BUILD
 * Maven
 
-### FRAMEWORK & LIBRARY
+### SERVER
 * Spring boot
 * Spring Web MVC
 * Thymeleaf (view template)
@@ -37,7 +37,7 @@
 * Spring Security
 * Spring Data JPA
 * H2
-* PostgreSQL
+* MySQL
 * Lombok
 * Spring mail
 * Query DSL
@@ -45,6 +45,10 @@
 * ModelMapper
 * Gmail SMTP (메일 전송) 
 * ArchUnit (아키텍처 테스트 유틸리티)
+
+// TODO PostgreSQL, Testcontainer 적용
+* PostgreSQL
+* TestContainer, TestContainer-PostgreSQL 모듈 (docker container)
 
 ### FRONTEND
 * Bootstrap
