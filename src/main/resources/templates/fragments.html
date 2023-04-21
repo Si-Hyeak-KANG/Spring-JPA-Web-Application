@@ -251,7 +251,7 @@
                     <a class="btn btn-outline-primary" th:href="@{'/study/' + ${study.path} + '/new-event'}">
                         <i class="fa fa-plus"></i> 모임 만들기
                     </a>
-				<a class="btn btn-outline-primary" th:href="@{'/study/' + ${study.path} + '/members'}"
+				<a th:if ="${study.recruiting}" class="btn btn-outline-primary" th:href="@{'/study/' + ${study.path} + '/members'}"
 				   th:text="${study.members.size() + study.managers.size()}">1</a>
                 </span>
 		</div>
