@@ -29,7 +29,7 @@ public class SecurityConfig {
         http
                 .authorizeRequests()
                 .mvcMatchers("/", "/login", "/sign-up", "/check-email-token",
-                        "/email-login","/login-by-email", "/check-email-login", "/login-link").permitAll()
+                        "/email-login","/login-by-email", "/search/study").permitAll()
                 .mvcMatchers(HttpMethod.GET, "/profile/*").permitAll()
                 .anyRequest().authenticated()
                 .and()
