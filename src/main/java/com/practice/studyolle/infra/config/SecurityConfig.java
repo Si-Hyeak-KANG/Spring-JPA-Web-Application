@@ -39,8 +39,7 @@ public class SecurityConfig {
                 .logout().logoutSuccessUrl("/");
 
         http.rememberMe()
-                .userDetailsService(userDetailsService)
-                .tokenRepository(tokenRepository()).tokenValiditySeconds(60);
+                .userDetailsService(userDetailsService);
 
         return http.build();
     }

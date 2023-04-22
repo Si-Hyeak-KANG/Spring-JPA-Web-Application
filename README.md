@@ -60,6 +60,7 @@
 * 위지윅 에디터 (summernote)
 * moment (date format)
 * Bootbox.js(모달창)
+* mark.js
 * NPM
 * package.json
 

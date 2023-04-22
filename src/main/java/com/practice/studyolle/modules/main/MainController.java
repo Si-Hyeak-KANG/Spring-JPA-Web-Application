@@ -43,6 +43,7 @@ public class MainController {
         // 만약 empty 컬렉션을 이름 없이 넘길 경우. 무시해버림.
         model.addAttribute("studyPage",studyPage);
         model.addAttribute("keyword", keyword);
+        model.addAttribute("sortProperty", pageable.getSort().toString().contains("publishedDateTime") ? "publishedDateTime" : "memberCount");
         return "search";
     }
 }

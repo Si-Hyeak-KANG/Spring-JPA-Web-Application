@@ -67,6 +67,20 @@
 			font-weight: lighter;
 		}
 
+		mark {
+			padding: 0;
+			background: transparent;
+			background: linear-gradient(to right, #f0ad4e 50%, transparent 50%);
+			background-position: right bottom;
+			background-size: 200% 100%;
+			transition: all .5s ease;
+			color: #fff;
+		}
+
+		mark.animate {
+			background-position: left bottom;
+			color: #000;
+		}
 	</style>
 </head>
 
@@ -112,7 +126,7 @@
 					<i class="fa fa-plus" aria-hidden="true"></i> 스터디 개설
 				</a>
 			</li>
-			<li class="nav-item dropdown " sec:authorize="isAuthenticated()">
+			<li class="nav-item dropdown" sec:authorize="isAuthenticated()">
 				<a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown"
 				   aria-haspopup="true" aria-expanded="false">
 					<img th:if="${!#strings.isEmpty(account?.profileImage)}" th:src="${account.profileImage}"
