@@ -5,11 +5,13 @@ import com.practice.studyolle.modules.account.CurrentAccount;
 import com.practice.studyolle.modules.study.Study;
 import com.practice.studyolle.modules.study.StudyRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-
-import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
@@ -30,10 +32,16 @@ public class MainController {
         return "login";
     }
 
+    // Pageable -> size, page, sort 파라미터를 받을 수 있음
     @GetMapping("/search/study")
-    public String searchStudy(String keyword, Model model) {
-        List<Study> studyList = studyRepository.findByKeyword(keyword);
-        model.addAttribute(studyList);
+    public String searchStudy(String keyword, Model model,
+            @PageableDefault(size = 9, sort = "publishedDateTime", direction = Sort.Direction.ASC) Pageable pageable) {
+        Page<Study> studyPage = studyRepository.findByKeyword(keyword, pageable);
+
+        // Spring MVC
+        // 이름을 주면서 넘기는 거와 안주는 것에 차이가 있음
+        // 만약 empty 컬렉션을 이름 없이 넘길 경우. 무시해버림.
+        model.addAttribute("studyPage",studyPage);
         model.addAttribute("keyword", keyword);
         return "search";
     }

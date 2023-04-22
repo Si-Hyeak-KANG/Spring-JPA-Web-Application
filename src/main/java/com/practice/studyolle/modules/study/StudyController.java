@@ -81,5 +81,15 @@ public class StudyController {
         return "redirect:/study/" + study.getEncodedPath() + "/members";
     }
 
+    /**
+     * 임시 테스트용 데이터 생성
+     */
+    @GetMapping("/study/data")
+    public String generateTestData(@CurrentAccount Account account) {
+        studyService.generateTestStudies(account);
+        return "redirect:/";
+    }
+
+
     // TODO 관리자 권한 부여 기능 구현
 }
