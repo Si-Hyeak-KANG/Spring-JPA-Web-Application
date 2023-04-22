@@ -235,7 +235,7 @@
 			<span sec:authorize="isAuthenticated()"
 			      th:if="${study.isJoinable(#authentication.principal) && !study.closed}"
 			      class="btn-group" role="group" aria-label="Basic example">
-				<a th:if="${account.emailVerified}" class="btn btn-primary"
+				<a class="btn btn-primary"
 				   th:href="@{'/study/' + ${study.path} + '/join'}">
                         스터디 가입
 				</a>
