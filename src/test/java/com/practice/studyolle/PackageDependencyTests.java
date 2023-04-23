@@ -15,11 +15,12 @@ public class PackageDependencyTests {
     private static final String ACCOUNT = "..modules.account..";
     private static final String TAG = "..modules.tag..";
     private static final String ZONE = "..modules.zone..";
+    private static final String MAIN = "..modules.main..";
 
     // 스터디 페키지는 스터디와 이벤트 패키지에서 참조되어진다.
     @ArchTest
     ArchRule studyPackageRule = classes().that().resideInAPackage(STUDY)
-            .should().onlyBeAccessed().byClassesThat().resideInAnyPackage(STUDY, EVENT);
+            .should().onlyBeAccessed().byClassesThat().resideInAnyPackage(STUDY, EVENT, MAIN);
 
     // 이벤트 패키지는 이벤트, 스터디, 회원을 참조한다.
     @ArchTest
