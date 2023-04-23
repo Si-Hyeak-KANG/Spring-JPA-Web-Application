@@ -2,7 +2,9 @@ package com.practice.studyolle.modules.study;
 
 import com.practice.studyolle.modules.account.QAccount;
 import com.practice.studyolle.modules.tag.QTag;
+import com.practice.studyolle.modules.tag.Tag;
 import com.practice.studyolle.modules.zone.QZone;
+import com.practice.studyolle.modules.zone.Zone;
 import com.querydsl.core.QueryResults;
 import com.querydsl.jpa.JPQLQuery;
 import org.springframework.data.domain.Page;
@@ -11,6 +13,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 
 import java.util.List;
+import java.util.Set;
 
 /*
 N+1 Select 문제
@@ -24,7 +27,14 @@ left(outer) join + fetch Join + distinct 로 해결
     - 중복 제거
 
 */
-public class StudyRepositoryExtensionImpl extends QuerydslRepositorySupport implements StudyRepositoryExtension{
+/* 여기서 더 최적화를 하려면.
+    1. distinct()를 빼는 것 -> 쿼리상 의미없음. join 한 전체 쿼리 자체는 중복되는 것이 없어서 distinct 가 의미없음
+    -> 하지만 JPA가 한번 더 해석하면서 fetch 시에 중복을 걸러냄 -> 결과적으론 중복 제거
+    -> 하지만 키워드 때문에 의미없이 검사하는 시간 지체됨
+    2. result transform 을 제공
+    3. 필요한 데이터만 조회하는 projection 활용
+*/
+public class StudyRepositoryExtensionImpl extends QuerydslRepositorySupport implements StudyRepositoryExtension {
 
     // 자식 생성자를 호출할 때 부모 생성자도 호출됨
     // 없으면 컴파일 에러
@@ -60,30 +70,20 @@ public class StudyRepositoryExtensionImpl extends QuerydslRepositorySupport impl
     }
 
 
-    /* 여기서 더 최적화를 하려면.
-    1. distinct()를 빼는 것 -> 쿼리상 의미없음. join 한 전체 쿼리 자체는 중복되는 것이 없어서 distinct 가 의미없음
-    -> 하지만 JPA가 한번 더 해석하면서 fetch 시에 중복을 걸러냄 -> 결과적으론 중복 제거
-    -> 하지만 키워드 때문에 의미없이 검사하는 시간 지체됨
-    2. result transform 을 제공
-    3. 필요한 데이터만 조회하는 projection 활용
-     */
-/* 노 페이징
     @Override
-    public List<Study> findByKeyword(String keyword, Pageable pageable) {
-
+    public List<Study> findByAccount(Set<Tag> tags, Set<Zone> zones) {
         QStudy study = QStudy.study;
-
         JPQLQuery<Study> query = from(study).where(study.published.isTrue()
-                        .and(study.title.containsIgnoreCase(keyword))
-                        .or(study.tags.any().title.containsIgnoreCase(keyword))
-                        .or(study.zones.any().localNameOfCity.containsIgnoreCase(keyword)))
+                        .and(study.closed.isFalse())
+                        .and(study.tags.any().in(tags))
+                        .and(study.zones.any().in(zones)))
                 .leftJoin(study.tags, QTag.tag).fetchJoin()
                 .leftJoin(study.zones, QZone.zone).fetchJoin()
-                .leftJoin(study.managers, QAccount.account).fetchJoin()
-                .leftJoin(study.members, QAccount.account).fetchJoin()
-                .distinct();
-
+                .orderBy(study.publishedDateTime.desc())
+                .distinct()
+                .limit(9);
         return query.fetch();
     }
- */
+
+
 }
