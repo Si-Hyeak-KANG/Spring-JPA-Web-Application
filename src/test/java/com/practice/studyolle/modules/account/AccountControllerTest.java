@@ -22,7 +22,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @MockMvcTest
-class AccountControllerTest extends AbstractContainerBaseTest {
+class AccountControllerTest {
 
     @Autowired private MockMvc mockMvc;
     @Autowired AccountRepository accountRepository;

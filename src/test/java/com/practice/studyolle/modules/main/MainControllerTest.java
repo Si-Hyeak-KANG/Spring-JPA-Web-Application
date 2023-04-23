@@ -19,7 +19,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @MockMvcTest
-class MainControllerTest extends AbstractContainerBaseTest {
+class MainControllerTest {
 
     @Autowired MockMvc mockMvc;
     @Autowired AccountService accountService;

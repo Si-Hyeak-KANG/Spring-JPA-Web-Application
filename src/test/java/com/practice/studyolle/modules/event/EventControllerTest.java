@@ -22,7 +22,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @MockMvcTest
-public class EventControllerTest extends AbstractContainerBaseTest {
+public class EventControllerTest {
 
     @Autowired MockMvc mockMvc;
     @Autowired EventService eventService;

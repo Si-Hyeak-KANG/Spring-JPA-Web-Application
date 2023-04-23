@@ -16,7 +16,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @MockMvcTest
-public class StudySettingsControllerTest extends AbstractContainerBaseTest {
+public class StudySettingsControllerTest {
 
     @Autowired
     MockMvc mockMvc;
@@ -38,7 +38,8 @@ public class StudySettingsControllerTest extends AbstractContainerBaseTest {
 
         mockMvc.perform(
                         get("/study/" + study.getPath() + "/settings/description"))
-                .andExpect(status().isForbidden());
+                .andExpect(status().isOk())
+                .andExpect(view().name("error"));
     }
 
     @WithAccount("test")

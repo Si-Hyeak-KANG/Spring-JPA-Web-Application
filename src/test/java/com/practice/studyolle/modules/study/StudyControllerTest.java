@@ -18,7 +18,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @MockMvcTest
-public class StudyControllerTest extends AbstractContainerBaseTest {
+public class StudyControllerTest {
 
     @Autowired MockMvc mockMvc;
     @Autowired StudyService studyService;

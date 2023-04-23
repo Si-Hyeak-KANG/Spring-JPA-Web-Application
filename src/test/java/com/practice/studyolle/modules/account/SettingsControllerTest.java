@@ -26,7 +26,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @MockMvcTest
-class SettingsControllerTest extends AbstractContainerBaseTest {
+class SettingsControllerTest {
 
     @Autowired MockMvc mockMvc;
     @Autowired AccountService accountService;
@@ -52,7 +52,8 @@ class SettingsControllerTest extends AbstractContainerBaseTest {
     @DisplayName("프로필 수정 폼")
     @Test
     void updateProfileForm() throws Exception {
-        mockMvc.perform(get(ROOT + SETTINGS + PROFILE)).andExpect(status().isOk()).andExpect(view().name(SETTINGS + PROFILE)).andExpect(model().attributeExists("account")).andExpect(model().attributeExists("profile"));
+        mockMvc.perform(get(ROOT + SETTINGS + PROFILE))
+                .andExpect(status().isOk()).andExpect(view().name(SETTINGS + PROFILE)).andExpect(model().attributeExists("account")).andExpect(model().attributeExists("profile"));
     }
 
     @WithAccount("test")
