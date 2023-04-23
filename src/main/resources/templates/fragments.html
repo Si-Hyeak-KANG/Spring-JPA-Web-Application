@@ -667,7 +667,7 @@
 
 <!-- NOTIFICATION-LIST-->
 <ul th:fragment="notification-list (notifications)" class="list-group list-group-flush">
-	<a href="#" th:href="@{${noti.link}}" th:each="noti: ${notifications}"
+	<a href="#" th:href="@{${notifications.link}}" th:each="noti: ${notifications}"
 	   class="list-group-item list-group-item-action">
 		<div class="d-flex w-100 justify-content-between">
 			<small class="text-muted" th:text="${noti.title}">Noti title</small>
